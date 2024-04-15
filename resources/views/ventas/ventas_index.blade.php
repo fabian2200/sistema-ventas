@@ -1,7 +1,8 @@
 @extends("maestra")
 @section("titulo", "Ventas")
 @section("contenido")
-<br>
+    <br>
+    <h3 style="width: 100%; text-align: center"><strong>Ventas ({{session('user_tipo') == 1 ? 'Todo' : (session('user_tipo') == 2 ? 'Tienda' : "Miscelánea")}})</strong></h3>
     <div class="row">
         <div class="col-lg-12">
             <div class="row">
@@ -10,27 +11,27 @@
                         <div style="width: 100%">
                             <h3><strong>Total Vendido Hoy</strong></h3>
                         </div> 
-                        <h1>$ {{ number_format($totalVendidoHoy, 2) }}</h1>
-                        <i style="opacity: .5; font-size: 50px; position: absolute; right: 30px; bottom: 30px" class="fas fa-donate"></i>
+                        <h2>$ {{ number_format($totalVendidoHoy, 2) }}</h2>
+                        <i style="opacity: .4; font-size: 80px; position: absolute; right: 30px; bottom: 30px" class="fas fa-donate"></i>
                     </div>
                 </div>
-                <div class="col-lg-3"></div>
                 <div style="padding: 20px;" class="col-lg-3">
                     <div class="card_ventas" style="background-color: rgb(4, 95, 1);">
                         <div style="width: 100%">
-                            <h3><strong>Total Vendido</strong></h3>
+                            <h3><strong>Total Vendido Mes</strong></h3>
                         </div> 
-                        <h1>$ {{ number_format($totalVendido, 2) }}</h1>
-                        <i style="opacity: .5; font-size: 50px; position: absolute; right: 30px; bottom: 30px" class="fas fa-cash-register"></i>
+                        <h2>$ {{ number_format($totalVendido, 2) }}</h2>
+                        <i style="opacity: .4; font-size: 80px; position: absolute; right: 30px; bottom: 30px" class="fas fa-cash-register"></i>
                     </div>
                 </div>
-                <div style="padding: 20px;" class="col-lg-3">
-                    <div class="card_ventas" style="background-color: rgb(247, 94, 6);">
+                <div class="col-lg-1"></div>
+                <div style="padding: 20px;" class="col-lg-5">
+                    <div class="card_ventas" style="background-color: rgb(245, 102, 6);">
                         <div style="width: 100%">
-                            <h3><strong>Total fiado</strong></h3>
+                            <h3><strong>Total Vendido</strong></h3>
                         </div> 
-                        <h1>$ {{ number_format($totalFiado, 2) }}</h1>
-                        <i style="opacity: .5; font-size: 50px; position: absolute; right: 30px; bottom: 30px" class="fas fa-hand-holding-usd"></i>
+                        <h2>$ {{ number_format($totalVendidoTotal, 2) }}</h2>
+                        <i style="opacity: .4; font-size: 80px; position: absolute; right: 30px; bottom: 30px" class="fas fa-cash-register"></i>
                     </div>
                 </div>
                 
@@ -39,7 +40,6 @@
         </div>
         <br>
         <hr>
-        <h3 style="width: 100%; text-align: center"><strong>Listado de ventas</strong></h3>
         <div class="col-12">
             @include("notificacion")
             <div class="table-responsive">

@@ -32,6 +32,8 @@ class VenderController extends Controller
         $venta->total_vueltos =  $request->input('total_vueltos');
         $imprimir_factura = $request->input("imprimir_factura");
         $venta->fecha_venta = date("Y-m-d");
+        $venta->id_vendedor = session('user_id');
+        $venta->tipo_venta = session('user_tipo');
         $venta->saveOrFail();
 
         if($venta->total_fiado > 0){

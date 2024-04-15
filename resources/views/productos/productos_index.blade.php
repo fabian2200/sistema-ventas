@@ -19,7 +19,6 @@
                 <table id="tabla_productos" class="table table-bordered">
                     <thead style="background-color: #91baee">
                         <tr>
-                            <th>Imagen</th>
                             <th>Código de barras</th>
                             <th>Descripción</th>
                             <th>Precio de compra</th>
@@ -32,9 +31,7 @@
                     <tbody>
                     @foreach($productos as $producto)
                         <tr>
-                            <td style="text-align: center">
-                                <img style="height: 70px" src="data:image/jpeg;base64,{{$producto->imagen}}" alt="">
-                            </td>
+                           
                             <td>{{$producto->codigo_barras}} <button onclick="setCodigoBarras('{{$producto->codigo_barras}}')" data-toggle="modal" data-target="#modalEditarCodigo" class="btn btn-warning"><i class="fas fa-pencil-alt"></i></button></td>
                             <td>{{$producto->descripcion}}</td>
                             <td>{{$producto->precio_compra}}</td>

@@ -13,72 +13,8 @@ use App\Cliente;
 class VentasController extends Controller
 {
 
-    public function ticket($idVenta, $imprimir_factura)
-    {
+    public function ticket($idVenta, $imprimir_factura){
         $venta = Venta::findOrFail($idVenta);
-
-        define('EURO',chr(36));
-        $pdf = new Fpdf('P','mm',array(80,150));
-        $pdf->AddPage();
-
-        $pdf->SetFont('Helvetica','',12);
-        $pdf->Cell(60,4,"Provisiones Carlos Andres",0,1,'C');
-        $pdf->Cell(60,4,"NIT 12435619",0,1,'C');
-        $pdf->Cell(60,4,"CRA 15 #13B Bis - 62",0,1,'C');
-        $pdf->Cell(60,4,"Brr. Alfonso Lopez",0,1,'C');
-        $pdf->SetFont('Helvetica','',8);
-        $pdf->Cell(60,4,'C.I.F.: 01234567A',0,1,'C');
-        $pdf->Cell(60,4,'C/ Arturo Soria, 1',0,1,'C');
-        $pdf->Cell(60,4,'C.P.: 28028 Madrid (Madrid)',0,1,'C');
-        $pdf->Cell(60,4,'999 888 777',0,1,'C');
-        $pdf->Cell(60,4,'alfredo@lacodigoteca.com',0,1,'C');
-        
-        // DATOS FACTURA        
-        $pdf->Ln(5);
-        $pdf->Cell(60,4,'Fecha: '.date("d/m/Y"),0,1,'');
-        $pdf->Cell(60,4,'Metodo de pago: EFECTIVO',0,1,'');
-        
-        // COLUMNAS
-        $pdf->SetFont('Helvetica', 'B', 7);
-        $pdf->Cell(30, 10, 'Articulo', 0);
-        $pdf->Cell(5, 10, 'Ud',0,0,'R');
-        $pdf->Cell(10, 10, 'Precio',0,0,'R');
-        $pdf->Cell(15, 10, 'Total',0,0,'R');
-        $pdf->Ln(8);
-        $pdf->Cell(60,0,'','T');
-        $pdf->Ln(0);
-        
-        // PRODUCTOS
-        $pdf->SetFont('Helvetica', '', 7);
-
-        $TOTAL = 0;
-        foreach ($venta->productos as $producto) {
-            $pdf->MultiCell(30,4,$producto->descripcion,0,'L'); 
-            $pdf->Cell(35, -5, $producto->cantidad ,0,0,'R');
-            $pdf->Cell(10, -5, EURO.number_format($producto->precio, 0, ',', ' '),0,0,'R');
-            $pdf->Cell(15, -5, EURO.number_format(self::redondearAl100($producto->cantidad * $producto->precio), 2, ',', ' '),0,0,'R');
-            $pdf->Ln(3);
-
-            $TOTAL += $producto->cantidad * $producto->precio;
-        }
-        
-        // SUMATORIO DE LOS PRODUCTOS Y EL IVA
-        $pdf->Ln(6);
-        $pdf->Cell(60,0,'','T');
-        $pdf->Ln(2);    
-        
-        $pdf->Cell(25, 10, 'TOTAL', 0);    
-        $pdf->Cell(20, 10, '', 0);
-        $pdf->Cell(15, 10, EURO.number_format(self::redondearAl100($venta->total_pagar), 2, ',', ' '),0,0,'R');
-
-
-        // PIE DE PAGINA
-        $pdf->Ln(10);
-        $pdf->Cell(60,0,'Cliente: '.$venta->cliente->nombre,0,1,'C');
-        $pdf->Ln(3);
-        $pdf->Cell(60,0,'Gracias por su compra',0,1,'C');
-        
-        $pdf->Output('F', 'tickets/ticket_venta_'.$idVenta.'.pdf');
 
         if($imprimir_factura == "si"){
             $nombreImpresora = env("NOMBRE_IMPRESORA");
@@ -117,6 +53,7 @@ class VentasController extends Controller
             $impresora->text("Gracias por su compra\n");
             $impresora->text("\nVentSOFT By Ing. Fabian Quintero\n");
             $impresora->feed(10);
+            
             $impresora->pulse();
             $impresora->close();
         }
@@ -127,7 +64,6 @@ class VentasController extends Controller
     public function ImprimirTicket(Request $request){
 
         $idVenta = $request->input("id_venta");
-        
         $venta = Venta::findOrFail($idVenta);
 
         $nombreImpresora = env("NOMBRE_IMPRESORA");
@@ -166,7 +102,6 @@ class VentasController extends Controller
         $impresora->text("Gracias por su compra\n");
         $impresora->text("\nVentSOFT By Ing. Fabian Quintero\n");
         $impresora->feed(10);
-        $impresora->pulse();
         $impresora->close();
         return response()->json(["mensaje" => "Ticket de venta impreso correctamente!"]);
     }
@@ -182,70 +117,66 @@ class VentasController extends Controller
      */
     public function index()
     {        
-        $ventasConTotales = Venta::join("clientes", "clientes.id", "ventas.id_cliente")
+        $totalVendido = 0;
+        $totalVendidoTotal = 0;
+        $hoy = date("Y-m-d");
+        $mes_actual = date('m');
+        $anio_actual = date('Y');
+
+        $tipo_venta = session('user_tipo');
+
+        if($tipo_venta == 1){
+            $ventasConTotales = Venta::join("clientes", "clientes.id", "ventas.id_cliente")
             ->select("ventas.*", "clientes.nombre as cliente")
             ->orderBy("ventas.created_at", "DESC")
             ->get();
+    
+            $totalVendidoHoy = Venta::join("clientes", "clientes.id", "ventas.id_cliente")
+            ->where("ventas.fecha_venta", $hoy)
+            ->sum("ventas.total_pagar");
+    
+            $primeros100 = Venta::join("clientes", "clientes.id", "ventas.id_cliente")
+                ->select("ventas.*", "clientes.nombre as cliente")
+                ->orderBy("ventas.created_at", "DESC")
+                ->limit(1000)
+                ->get();
+        }else{
+            $ventasConTotales = Venta::join("clientes", "clientes.id", "ventas.id_cliente")
+            ->select("ventas.*", "clientes.nombre as cliente")
+            ->where("ventas.tipo_venta", $tipo_venta)
+            ->orderBy("ventas.created_at", "DESC")
+            ->get();
+    
+            $totalVendidoHoy = Venta::join("clientes", "clientes.id", "ventas.id_cliente")
+            ->where("ventas.fecha_venta", $hoy)
+            ->where("ventas.tipo_venta", $tipo_venta)
+            ->sum("ventas.total_pagar");
+    
+            $primeros100 = Venta::join("clientes", "clientes.id", "ventas.id_cliente")
+                ->select("ventas.*", "clientes.nombre as cliente")
+                ->where("ventas.tipo_venta", $tipo_venta)
+                ->orderBy("ventas.created_at", "DESC")
+                ->limit(1000)
+                ->get();
+        }
+       
 
-        
-        $totalVendido = 0;
-        
-        $mes_actual = date('m');
-        $anio_actual = date('Y');
         foreach ($ventasConTotales as $item) {
             $mes_factura = explode("-", $item->fecha_venta)[1];
             $anio_factura = explode("-", $item->fecha_venta)[0];
+
+            $totalVendidoTotal += $item->total_pagar;
+
             if($mes_actual == $mes_factura && $anio_actual == $anio_factura){
                 $totalVendido += $item->total_pagar;
             }
         }
-
-        $fiado = 0;
-        $abonado = 0;
-
-        $resultado = Cliente::join("fiados", "clientes.id", "=", "fiados.id_cliente")
-        ->selectRaw("clientes.*, SUM(fiados.total_fiado) as total_fiado")
-        ->groupBy('clientes.id')
-        ->get();
-
-
-        foreach ($resultado as $item) {
-            $abonado_cliente = Cliente::join("abonos_fiados", "clientes.id", "=", "abonos_fiados.id_cliente")
-            ->selectRaw("clientes.id, SUM(abonos_fiados.valor_abonado) as total_abonado")
-            ->where("clientes.id", $item->id)
-            ->groupBy('clientes.id')
-            ->get();
-
-            if(count($abonado_cliente) == 0){
-                $total_abonado = 0;
-            }else{
-                $total_abonado = (double) $abonado_cliente[0]->total_abonado;
-            }
-
-            $abonado = $abonado + $total_abonado;
-            $fiado = $fiado + $item->total_fiado;
-
-        }
-      
-        $totalFiado = $fiado - $abonado;
-
-
-        $hoy = date("Y-m-d");
-        $totalVendidoHoy = Venta::join("clientes", "clientes.id", "ventas.id_cliente")
-        ->where("ventas.fecha_venta", $hoy)
-        ->sum("ventas.total_pagar");
-
-        $primeros100 = Venta::join("clientes", "clientes.id", "ventas.id_cliente")
-            ->select("ventas.*", "clientes.nombre as cliente")
-            ->orderBy("ventas.created_at", "DESC")
-            ->limit(100)
-            ->get();
-            
+                    
         return view("ventas.ventas_index", [
             "ventas" => $primeros100, 
             "totalVendido" => $totalVendido,
-            "totalFiado" => $totalFiado,
-            "totalVendidoHoy" => $totalVendidoHoy
+            "totalVendidoHoy" => $totalVendidoHoy,
+            "totalVendidoTotal" => $totalVendidoTotal
         ]);
     }
 

@@ -29,7 +29,8 @@ class ProductosController extends Controller
      */
     public function create()
     {
-        return view("productos.productos_create");
+        $categorias =  DB::connection('mysql')->table('categorias')->orderBy("categorias.nombre", "ASC")->get();
+        return view("productos.productos_create", ["categorias" => $categorias]);
     }
 
     /**

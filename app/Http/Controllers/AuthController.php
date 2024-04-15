@@ -12,7 +12,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'email' => 'required|string|email|unique:users',
+            'email' => 'required|string|unique:users',
             'password' => 'required|string|confirmed',
         ]);
         $user = new User([
@@ -27,30 +27,24 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+    
         $request->validate([
-            'email' => 'required|string|email',
+            'email' => 'required|string',
             'password' => 'required|string',
             'remember_me' => 'boolean',
         ]);
+        
         $credentials = request(['email', 'password']);
-        if (!Auth::attempt($credentials)) {
-            return response()->json([
-                'message' => 'Unauthorized'], 401);
+        if(Auth::attempt($credentials)) {
+            $user = $request->user();
+
+            session(['user_id' => $user->id]);
+            session(['user_tipo' => $user->tipo]);
+
+            return redirect()->route("home");
+        }else{
+            return redirect()->back()->withErrors(['mensaje' => 'Credenciales incorrectas. Por favor, inténtalo de nuevo.']);
         }
-        $user = $request->user();
-        $tokenResult = $user->createToken('Personal Access Token');
-        $token = $tokenResult->token;
-        if ($request->remember_me) {
-            $token->expires_at = Carbon::now()->addWeeks(1);
-        }
-        $token->save();
-        return response()->json([
-            'access_token' => $tokenResult->accessToken,
-            'token_type' => 'Bearer',
-            'expires_at' => Carbon::parse(
-                $tokenResult->token->expires_at)
-                ->toDateTimeString(),
-        ]);
     }
 
     public function logout(Request $request)

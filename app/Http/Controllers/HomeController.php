@@ -28,7 +28,31 @@ class HomeController extends Controller
     }
 
     public function configurarNegocio(){
-        $negocio = $productos = DB::connection('mysql')->table('negocio')->first();
+        $negocio = DB::connection('mysql')->table('negocio')->first();
+        return view('config', ["negocio" => $negocio]);
+    }
+
+    public function editarNegocio(Request $request){
+        $nombre = $request->input('nombre');
+        $nit = $request->input('nit');
+        $direccion = $request->input('direccion');
+        $telefono = $request->input('telefono');
+        $barrio = $request->input('barrio');
+        $propietario = $request->input('propietario');
+        
+
+        DB::connection('mysql')->table('negocio')
+        ->where('id', 1)
+        ->update([
+            'nombre' => $nombre,
+            'nit' => $nit,
+            'direccion' => $direccion,
+            'telefono' => $telefono,
+            'barrio' => $barrio,
+            'propietario' => $propietario,
+        ]);
+
+        $negocio = DB::connection('mysql')->table('negocio')->first();
         return view('config', ["negocio" => $negocio]);
     }
 }

@@ -9,7 +9,7 @@
                 <div class="card-header">Login</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
+                    <form method="POST" action="{{ route('login-usuario') }}">
                         @csrf
 
                         <div class="form-group row">
@@ -45,9 +45,14 @@
                             </div>
                         </div>
 
+                        @if ($errors->has('mensaje'))
+                            <hr>
+                            <strong style="width: 100%;text-align: center;color: red;display: block;background-color: #ffbdbd;padding: 10px;">No se encontro un usuario con esas credenciales</strong>
+                            <br>
+                        @endif
 
                         <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
+                            <div class="col-md-12 text-center">
                                 <button style="width: 74%" type="submit" class="btn btn-primary">
                                     Iniciar Sesión
                                 </button>

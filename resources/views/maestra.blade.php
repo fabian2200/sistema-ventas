@@ -9,6 +9,7 @@
     <link href="{{url("/css/bootstrap.min.css")}}" rel="stylesheet">
     <link href="{{url("/css/all.min.css")}}" rel="stylesheet">
     <link href="{{url("/css/jquery.dataTables.min.css")}}" rel="stylesheet">
+    <link href="{{url("/select_search/select2.min.css")}}" rel="stylesheet">
     <script src="{{url("/css/sweetalert.js")}}"></script>
     <script src="{{url("/js/jquery-3.7.0.js")}}"></script>
     <script src="{{url("/js/jquery.dataTables.min.js")}}"></script>
@@ -26,6 +27,8 @@
     <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+    
+    <script src="{{url("/select_search/select2.min.js")}}"></script>
     <style>
         body {
             padding-top: 57px;
@@ -194,6 +197,10 @@
             align-items: center;
             top: 3px;
             right: 0px;
+        }
+
+        .btn:not(.disabled):hover {
+            margin-top: 0px !important;
         }
     </style>
 </head>

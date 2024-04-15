@@ -15,14 +15,20 @@
                 <div class="form-group">
                     <label class="label">Correo electrónico</label>
                     <input required autocomplete="off" name="email" class="form-control"
-                           type="email" placeholder="Correo electrónico">
+                           type="text" placeholder="Correo electrónico">
                 </div>
                 <div class="form-group">
                     <label class="label">Contraseña</label>
                     <input required autocomplete="off" name="password" class="form-control"
                            type="password" placeholder="Contraseña">
                 </div>
-
+                <div class="form-group">
+                    <label class="label">Tipo de vendedor</label>
+                    <select class="form-control" name="tipo" id="tipo">
+                        <option value="2">Tienda</option>
+                        <option value="3">Miscelánea</option>
+                    </select>
+                </div>
                 @include("notificacion")
                 <button class="btn btn-success">Guardar</button>
                 <a class="btn btn-primary" href="{{route("usuarios.index")}}">Volver al listado</a>

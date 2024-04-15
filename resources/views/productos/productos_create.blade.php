@@ -54,53 +54,13 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-2" style="margin-bottom: 20px">
-                                <input required type="radio" id="control_01" name="categoria" value="Aseo" >
-                                <label class="lradio" for="control_01">
-                                    <img src="/img/aseo.png" style="width: 50px" alt="">
-                                    <p>Aseo</p>
-                                </label>
-                            </div>
-                            <div class="col-lg-2" style="margin-bottom: 20px">
-                                <input required type="radio" id="control_02" name="categoria" value="Alimentos">
-                                <label class="lradio" for="control_02">
-                                    <img src="/img/alimentos.png" style="width: 50px" alt="">
-                                    <p>Alimentos</p>
-                                </label>
-                            </div>
-                            <div class="col-lg-2" style="margin-bottom: 20px">
-                                <input required type="radio" id="control_03" name="categoria" value="Bebidas">
-                                <label class="lradio" for="control_03">
-                                    <img src="/img/bebidas.png" style="width: 50px" alt="">
-                                    <p>Bebidas</p>
-                                </label>
-                            </div>
-                            <div class="col-lg-2" style="margin-bottom: 20px">
-                                <input required type="radio" id="control_05" name="categoria" value="Carnes">
-                                <label class="lradio" for="control_05">
-                                    <img src="/img/carne.png" style="width: 50px" alt="">
-                                    <p>Carnes</p>
-                                </label>
-                            </div>
-                            <div class="col-lg-2" style="margin-bottom: 20px">
-                                <input required type="radio" id="control_07" name="categoria" value="Farmacia">
-                                <label class="lradio" for="control_07">
-                                    <img src="/img/farmacia.png" style="width: 50px" alt="">
-                                    <p>Farmacia</p>
-                                </label>
-                            </div>
-                            <div class="col-lg-2" style="margin-bottom: 20px">
-                                <input required type="radio" id="control_007" name="categoria" value="Fritos">
-                                <label class="lradio" for="control_007">
-                                    <img src="/img/fritos.png" style="width: 60px" alt="">
-                                    <p>Fritos y Jugos</p>
-                                </label>
-                            </div>
-                            <div class="col-lg-2" style="margin-bottom: 20px">
-                                <input required type="radio" id="control_06" name="categoria" value="Otros">
-                                <label class="lradio" for="control_06">
-                                    <p>Otros</p>
-                                </label>
+                            <div class="col-lg-12" style="margin-bottom: 20px">
+                                <label class="label">Categoria del producto</label>
+                                <select name="categoria" class="form-control select2" placeholder="Select City" required>
+                                    @foreach ($categorias as $item)
+                                        <option value="{{$item->id}}">{{$item->nombre}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -121,20 +81,27 @@
             </form>
         </div>
     </div>
-@endsection
-<script>
-    function cargarImagen() {
-        var input = document.getElementById('imagen');
-        var imagenPrevio = document.getElementById('imagen_previa');
+    <script>
 
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                imagenPrevio.src = e.target.result;
-            };
-
-            reader.readAsDataURL(input.files[0]);
+        $(document).ready(function () {
+            $('.select2').select2();
+        });
+    
+        function cargarImagen() {
+            var input = document.getElementById('imagen');
+            var imagenPrevio = document.getElementById('imagen_previa');
+    
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+    
+                reader.onload = function (e) {
+                    imagenPrevio.src = e.target.result;
+                };
+    
+                reader.readAsDataURL(input.files[0]);
+            }
         }
-    }
-</script>
+    
+       
+    </script>
+@endsection

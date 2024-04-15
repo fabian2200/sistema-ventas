@@ -3,17 +3,19 @@
 @section("contenido")
     <div class="row">
         <div class="col-12">
+            <br>
             <h1>Usuarios <i class="fa fa-users"></i></h1>
-            <a href="{{route("usuarios.create")}}" class="btn btn-success mb-2">Agregar</a>
+            <a href="{{route("usuarios.create")}}" class="btn btn-success mb-2"><h3>Registrar usuario <i style="font-size: 20px" class="fas fa-plus"></i></h3></a>
             @include("notificacion")
+            <hr>
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead>
                     <tr>
-                        <th>Correo electrónico</th>
+                        <th>Usuario</th>
                         <th>Nombre</th>
+                        <th>Tipo</th>
                         <th>Editar</th>
-                        <th>Eliminar</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -21,19 +23,13 @@
                         <tr>
                             <td>{{$usuario->email}}</td>
                             <td>{{$usuario->name}}</td>
+                            <td> {{$usuario->tipo == 1 ? "Administrador" : ( $usuario->tipo == 2 ? "Tienda" : "Miscelánea" ) }}</td>
                             <td>
-                                <a class="btn btn-warning" href="{{route("usuarios.edit",[$usuario])}}">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-                            </td>
-                            <td>
-                                <form action="{{route("usuarios.destroy", [$usuario])}}" method="post">
-                                    @method("delete")
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </form>
+                                @if ($usuario->tipo != 1)
+                                    <a class="btn btn-warning" href="{{route("usuarios.edit",[$usuario])}}">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

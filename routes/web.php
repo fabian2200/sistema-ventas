@@ -64,9 +64,21 @@ Route::middleware("auth")
         Route::post("/terminarVentaDomicilio", "DomiciliosController@terminarVentaDomicilio")->name("terminarVentaDomicilio");
     
         Route::get("/config", "HomeController@configurarNegocio")->name("config");
+        Route::post("/editar-negocio", "HomeController@editarNegocio")->name("editarNegocio");
+
+
+        Route::get("/categorias", "CategoriaController@index")->name("categorias");
+        Route::post("/guardarCategoria", "CategoriaController@guardarCategoria")->name("guardarCategoria");
+        Route::post("/editarCategoria", "CategoriaController@editarCategoria")->name("editarCategoria");
+        Route::get("/eliminarCategoria", "CategoriaController@eliminarCategoria")->name("eliminarCategoria");
+
+        Route::get("/proveedores", "ProveedorController@index")->name("proveedores");
+        Route::post("/guardarProveedor", "ProveedorController@guardarProveedor")->name("guardarProveedor");
+        Route::post("/editarProveedor", "ProveedorController@editarProveedor")->name("editarProveedor");
+        Route::get("/eliminarProveedor", "ProveedorController@eliminarProveedor")->name("eliminarProveedor");
 
     }
 );
 
-
+Route::post('/login-usuario', 'AuthController@login')->name("login-usuario");
 Route::get("/productos-categoria", "ProductosController@productosCategoria")->name("productosCategoria");

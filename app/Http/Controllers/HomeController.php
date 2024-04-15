@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -24,5 +25,10 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+
+    public function configurarNegocio(){
+        $negocio = $productos = DB::connection('mysql')->table('negocio')->first();
+        return view('config', ["negocio" => $negocio]);
     }
 }

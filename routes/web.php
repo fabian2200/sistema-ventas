@@ -62,6 +62,9 @@ Route::middleware("auth")
         Route::get("/generar-pdf", "ProductosController@generarPDF")->name("generarPDF");
         Route::get("/domicilios", "DomiciliosController@obtenerDomicilios")->name("ventas.domicilios");
         Route::post("/terminarVentaDomicilio", "DomiciliosController@terminarVentaDomicilio")->name("terminarVentaDomicilio");
+    
+        Route::get("/config", "HomeController@configurarNegocio")->name("config");
+
     }
 );
 

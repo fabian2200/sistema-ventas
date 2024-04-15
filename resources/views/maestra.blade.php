@@ -255,9 +255,15 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
+                <li style="margin-right: 15px" class="nav-item">
                     <a style="color: #fff" href="{{route("logout")}}" class="nav-link btn btn-danger">
                         Salir ({{ Auth::user()->name }}) <i class="fas fa-power-off"></i>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a style="color: #fff" href="{{route("config")}}" class="nav-link btn btn-dark">
+                      <i class="fas fa-cogs"></i>
                     </a>
                 </li>
             @endauth

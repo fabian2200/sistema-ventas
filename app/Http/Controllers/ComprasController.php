@@ -12,13 +12,15 @@ class ComprasController extends Controller
 {
     public function index()
     {        
-        $compras = DB::connection('mysql')->table('compras')
-        ->get();
-
+     
         $date = date("d-m-Y");
 
         $compras = DB::connection('mysql')->table('compras')
         ->orderBy("id", "DESC")
+        ->get();
+        
+        $proveedores = DB::connection('mysql')->table('proveedores')
+        ->orderBy("nombre", "DESC")
         ->get();
 
         $totalCompradoHoy = DB::connection('mysql')->table('compras')
@@ -29,6 +31,7 @@ class ComprasController extends Controller
         ->sum("total");
             
         return view("compras.compras_index", [
+            "proveedores" => $proveedores,
             "compras" => $compras, 
             "totalCompradoHoy" => $totalCompradoHoy,
             "totalComprado" => $totalComprado

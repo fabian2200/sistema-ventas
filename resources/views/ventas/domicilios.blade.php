@@ -70,7 +70,7 @@
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label style="font-size: 20px" for="">Total Dinero</label>
-                        <input style="font-size: 15px !important" autocomplete="off" id="total_dinero" required name="total_dinero" oninput="calcularCambio(this)" style="font-size: 20px" class="form-control" type="text">
+                        <input style="font-size: 15px !important" autocomplete="off" id="total_dinero" required name="total_dinero" oninput="calcularCambio(this)" style="font-size: 20px" class="form-control" type="number">
                     </div>
                     <div class="form-group">
                         <label style="font-size: 20px" for="">Total Fiado</label>

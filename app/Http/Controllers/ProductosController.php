@@ -301,8 +301,34 @@ class ProductosController extends Controller
             'precio_venta' => $precio_venta
         ]);
 
-        $this->modificarInventarioProductoNube($codigo_producto, $nueva_cantidad_disponible, $precio_compra, $precio_venta);
+        //$this->modificarInventarioProductoNube($codigo_producto, $nueva_cantidad_disponible, $precio_compra, $precio_venta);
         return redirect()->route("productos.index")->with("mensaje", "Producto actualizado");
+    }
+
+    public function modificarInventarioProductoMovil(Request $request){
+
+        $cantidad_disponible = $request->input('cantidad_disponible');
+        $precio_compra = $request->input('precio_compra');
+        $precio_venta = $request->input('precio_venta');
+        $nueva_cantidad = $request->input('nueva_cantidad');
+        $codigo_producto = $request->input('codigo_producto');
+
+        $nueva_cantidad_disponible = $cantidad_disponible + $nueva_cantidad;
+
+        
+        DB::connection('mysql')->table('productos')
+        ->where('codigo_barras', $codigo_producto)
+        ->update([
+            'existencia' => $nueva_cantidad_disponible,
+            'precio_compra' => $precio_compra,
+            'precio_venta' => $precio_venta
+        ]);
+
+        //$this->modificarInventarioProductoNube($codigo_producto, $nueva_cantidad_disponible, $precio_compra, $precio_venta);
+        return json_encode([
+            "mensaje" => "Inventario actualizado correctamente",
+            "success" => 1
+        ], true);
     }
 
     public function modificarInventarioProductoNube($codigo_producto, $nueva_cantidad_disponible, $precio_compra, $precio_venta){
@@ -383,7 +409,6 @@ class ProductosController extends Controller
         }
 
     }
-
 
     public function alert(){
         return view("productos.productos_alert", ["productos" =>  Producto::where('existencia', '<', 10)->get()]);

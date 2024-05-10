@@ -86,3 +86,4 @@ Route::get("/producto-id", "ProductosController@productoId")->name("productoId")
 Route::get("/listar-categorias", "ProductosController@listarCategorias")->name("listarCategorias");
 Route::post('/editar-producto-movil', 'ProductosController@updateMovil')->name("updateMovil");
 Route::get("/producto-cb", "ProductosController@productoCB")->name("productoCB");
+Route::post("/editar-inventario-movil", "ProductosController@modificarInventarioProductoMovil")->name("modificarInventarioProductoMovil");

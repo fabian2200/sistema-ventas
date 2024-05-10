@@ -76,9 +76,13 @@ Route::middleware("auth")
         Route::post("/guardarProveedor", "ProveedorController@guardarProveedor")->name("guardarProveedor");
         Route::post("/editarProveedor", "ProveedorController@editarProveedor")->name("editarProveedor");
         Route::get("/eliminarProveedor", "ProveedorController@eliminarProveedor")->name("eliminarProveedor");
-
     }
 );
 
 Route::post('/login-usuario', 'AuthController@login')->name("login-usuario");
 Route::get("/productos-categoria", "ProductosController@productosCategoria")->name("productosCategoria");
+Route::get("/productos-paginados", "ProductosController@productosPaginados")->name("productosPaginados");
+Route::get("/producto-id", "ProductosController@productoId")->name("productoId");
+Route::get("/listar-categorias", "ProductosController@listarCategorias")->name("listarCategorias");
+Route::post('/editar-producto-movil', 'ProductosController@updateMovil')->name("updateMovil");
+Route::get("/producto-cb", "ProductosController@productoCB")->name("productoCB");

@@ -22,6 +22,55 @@ class ProductosController extends Controller
         return view("productos.productos_index", ["productos" => Producto::all()]);
     }
 
+    public function productosPaginados(Request $request){
+        $perPage = $request->query('perpage', 10); 
+        $page = $request->query('page', 1);
+
+        $desc = $request->query('des');
+
+        if($desc == "todo"){
+            $skip = ($page - 1) * $perPage;
+            $productos = DB::connection('mysql')
+            ->table('productos')
+            ->orderBy('existencia', 'ASC')
+            ->skip($skip)
+            ->take($perPage)
+            ->get();
+        }else{
+            $skip = ($page - 1) * $perPage;
+            $productos = DB::connection('mysql')
+            ->table('productos')
+            ->where('codigo_barras', $desc)
+            ->orWhere('descripcion', 'like', '%' . $desc . '%')
+            ->skip($skip)
+            ->take($perPage)
+            ->get();
+        }
+        
+
+        return json_encode($productos);
+    }
+
+    public function productoId(Request $request){
+        $id = $request->query('id');
+           
+        $producto = DB::connection('mysql')
+        ->table('productos')
+        ->where('id', $id)
+        ->first();
+
+        return json_encode($producto);
+    }
+
+    public function listarCategorias(){
+        $categorias = DB::connection('mysql')
+        ->table('categorias')
+        ->select('nombre')
+        ->get();
+
+        return json_encode($categorias);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -109,7 +158,8 @@ class ProductosController extends Controller
      */
     public function edit(Producto $producto)
     {
-        return view("productos.productos_edit", ["producto" => $producto]);
+        $categorias =  DB::connection('mysql')->table('categorias')->orderBy("categorias.nombre", "ASC")->get();
+        return view("productos.productos_edit", ["producto" => $producto, "categorias" => $categorias]);
     }
 
     /**
@@ -136,6 +186,62 @@ class ProductosController extends Controller
         $producto->saveOrFail();
         $this->actualizarProductoNube($producto);
         return redirect()->route("productos.index")->with("mensaje", "Producto actualizado");
+    }
+
+    public function updateMovil(Request $request)
+    {
+        $id = $request->input('id');
+        $codigo_barras = $request->input('codigo_barras');
+        $descripcion = $request->input('descripcion');
+        $categoria = $request->input('categoria');
+        $precio_compra = $request->input('precio_compra');
+        $precio_venta = $request->input('precio_venta');
+        $existencia = $request->input('existencia');
+        $unidad_medida = $request->input('unidad_medida');
+        $imagen = $request->input('imagen');
+
+        $affectedRows = DB::connection('mysql')->table('productos')
+        ->where('id', $id)
+        ->update([
+            'id' => $id,
+            'codigo_barras' => $codigo_barras,
+            'descripcion' => $descripcion,
+            'categoria' => $categoria,
+            'precio_compra' => $precio_compra,
+            'precio_venta' => $precio_venta,
+            'existencia' => $existencia,
+            'unidad_medida' => $unidad_medida,
+            'imagen' => $imagen
+        ]);
+
+        if ($affectedRows > 0) {
+            //$producto = DB::connection('mysql')->table('productos')
+            //->where('id', $id)
+            //->first();
+
+            //$this->actualizarProductoNube($producto);
+
+            return json_encode([
+                "mensaje" => "Producto actualizado correctamente",
+                "success" => 1
+            ], true);
+        }else{
+            return json_encode([
+                "mensaje" => "No se actualizo la información",
+                "success" => 0
+            ], true);
+        }
+    }
+
+    public function productoCB(Request $request){
+        $cb = $request->query('cb');
+           
+        $producto = DB::connection('mysql')
+        ->table('productos')
+        ->where('codigo_barras', $cb)
+        ->first();
+
+        return json_encode($producto);
     }
 
     public function actualizarProductoNube($producto){

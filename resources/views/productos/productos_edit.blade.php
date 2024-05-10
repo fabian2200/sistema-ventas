@@ -52,6 +52,7 @@
                                     <label class="label">Medida</label>
                                     <select name="unidad_medida" id="unidad_medida" class="form-control">
                                         <option {{ $producto->unidad_medida == 'Unidades' ? 'selected' : '' }} value="Unidades">Unidades</option>
+                                        <option {{ $producto->unidad_medida == 'Gramos' ? 'selected' : '' }} value="Gramos">Gramos</option>
                                         <option {{ $producto->unidad_medida == 'Libras' ? 'selected' : '' }} value="Libras">Libras</option>
                                         <option {{ $producto->unidad_medida == 'Kilos' ? 'selected' : '' }} value="Kilos">Kilos</option>
                                     </select>
@@ -59,53 +60,14 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-2" style="margin-bottom: 20px">
-                                <input {{ $producto->categoria === 'Aseo' ? 'checked' : '' }} required type="radio" id="control_01"  name="categoria" value="Aseo" >
-                                <label class="lradio" for="control_01">
-                                    <img src="/img/aseo.png" style="width: 50px" alt="">
-                                    <p>Aseo</p>
-                                </label>
-                            </div>
-                            <div class="col-lg-2" style="margin-bottom: 20px">
-                                <input {{ $producto->categoria === 'Alimentos' ? 'checked' : '' }} required type="radio" id="control_02" name="categoria" value="Alimentos">
-                                <label class="lradio" for="control_02">
-                                    <img src="/img/alimentos.png" style="width: 50px" alt="">
-                                    <p>Alimentos</p>
-                                </label>
-                            </div>
-                            <div class="col-lg-2" style="margin-bottom: 20px">
-                                <input {{ $producto->categoria === 'Bebidas' ? 'checked' : '' }} required type="radio" id="control_03" name="categoria" value="Bebidas">
-                                <label class="lradio" for="control_03">
-                                    <img src="/img/bebidas.png" style="width: 50px" alt="">
-                                    <p>Bebidas</p>
-                                </label>
-                            </div>
-                            <div class="col-lg-2" style="margin-bottom: 20px">
-                                <input {{ $producto->categoria === 'Carnes' ? 'checked' : '' }} required type="radio" id="control_05" name="categoria" value="Carnes">
-                                <label class="lradio" for="control_05">
-                                    <img src="/img/carne.png" style="width: 50px" alt="">
-                                    <p>Carnes</p>
-                                </label>
-                            </div>
-                            <div class="col-lg-2" style="margin-bottom: 20px">
-                                <input {{ $producto->categoria === 'Farmacia' ? 'checked' : '' }} required type="radio" id="control_07" name="categoria" value="Farmacia">
-                                <label class="lradio" for="control_07">
-                                    <img src="/img/farmacia.png" style="width: 50px" alt="">
-                                    <p>Farmacia</p>
-                                </label>
-                            </div>
-                            <div class="col-lg-2" style="margin-bottom: 20px">
-                                <input  {{ $producto->categoria === 'Fritos' ? 'checked' : '' }} required type="radio" id="control_007" name="categoria" value="Fritos">
-                                <label class="lradio" for="control_007">
-                                    <img src="/img/fritos.png" style="width: 60px" alt="">
-                                    <p>Fritos y Jugos</p>
-                                </label>
-                            </div>
-                            <div class="col-lg-2" style="margin-bottom: 20px">
-                                <input {{ $producto->categoria === 'Otros' ? 'checked' : '' }} required type="radio" id="control_06" name="categoria" value="Otros">
-                                <label class="lradio" for="control_06">
-                                    <p>Otros</p>
-                                </label>
+                            <div class="col-lg-12" style="margin-bottom: 20px">
+                                <label class="label">Categoria del producto</label>
+                                <select name="categoria" class="form-control select2" placeholder="Select City" required>
+                                    <option value="">Seleccione una opcion</option>
+                                    @foreach ($categorias as $item)
+                                        <option {{ $producto->categoria == $item->nombre ? 'selected' : '' }} value="{{$item->nombre}}">{{$item->nombre}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>

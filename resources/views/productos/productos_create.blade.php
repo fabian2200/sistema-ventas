@@ -47,6 +47,7 @@
                                     <label class="label">Medida</label>
                                     <select name="unidad_medida" id="unidad_medida" class="form-control">
                                         <option value="Unidades">Unidades</option>
+                                        <option value="Gramos">Gramos</option>
                                         <option value="Libras">Libras</option>
                                         <option value="Kilos">Kilos</option>
                                     </select>
@@ -58,7 +59,7 @@
                                 <label class="label">Categoria del producto</label>
                                 <select name="categoria" class="form-control select2" placeholder="Select City" required>
                                     @foreach ($categorias as $item)
-                                        <option value="{{$item->id}}">{{$item->nombre}}</option>
+                                        <option value="{{$item->nombre}}">{{$item->nombre}}</option>
                                     @endforeach
                                 </select>
                             </div>

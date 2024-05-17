@@ -14,6 +14,7 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         'terminarVentaDomicilio',
         '/editar-producto-movil',
-        '/editar-inventario-movil'
+        '/editar-inventario-movil',
+        '/registrar-producto-movil'
     ];
 }

@@ -113,7 +113,7 @@ class ProductosController extends Controller
         $producto->imagen = $base64Image;
         $producto->saveOrFail();
 
-        $this->registrarProductoNube($request->except('imagen'), $producto->imagen);
+        //$this->registrarProductoNube($request->except('imagen'), $producto->imagen);
         return redirect()->route("productos.create");
     }
 
@@ -184,7 +184,7 @@ class ProductosController extends Controller
 
         $producto->imagen = $base64Image;
         $producto->saveOrFail();
-        $this->actualizarProductoNube($producto);
+        //$this->actualizarProductoNube($producto);
         return redirect()->route("productos.index")->with("mensaje", "Producto actualizado");
     }
 
@@ -223,6 +223,48 @@ class ProductosController extends Controller
 
             return json_encode([
                 "mensaje" => "Producto actualizado correctamente",
+                "success" => 1
+            ], true);
+        }else{
+            return json_encode([
+                "mensaje" => "No se actualizo la información",
+                "success" => 0
+            ], true);
+        }
+    }
+
+    public function registrarProductoMovil(Request $request)
+    {
+        $codigo_barras = $request->input('codigo_barras');
+        $descripcion = $request->input('descripcion');
+        $categoria = $request->input('categoria');
+        $precio_compra = $request->input('precio_compra');
+        $precio_venta = $request->input('precio_venta');
+        $existencia = $request->input('existencia');
+        $unidad_medida = $request->input('unidad_medida');
+        $imagen = $request->input('imagen');
+
+        $id_insertado = DB::connection('mysql')->table('productos')
+        ->insertGetId([
+            'codigo_barras' => $codigo_barras,
+            'descripcion' => $descripcion,
+            'categoria' => $categoria,
+            'precio_compra' => $precio_compra,
+            'precio_venta' => $precio_venta,
+            'existencia' => $existencia,
+            'unidad_medida' => $unidad_medida,
+            'imagen' => $imagen
+        ]);
+
+        if ($id_insertado) {
+            //$producto = DB::connection('mysql')->table('productos')
+            //->where('id', $id_insertado)
+            //->first();
+
+            //$this->registrarProductoNube($producto, $imagen);
+
+            return json_encode([
+                "mensaje" => "Producto registrado correctamente",
                 "success" => 1
             ], true);
         }else{

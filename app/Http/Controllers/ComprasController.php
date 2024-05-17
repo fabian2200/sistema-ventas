@@ -16,11 +16,12 @@ class ComprasController extends Controller
         $date = date("d-m-Y");
 
         $compras = DB::connection('mysql')->table('compras')
-        ->orderBy("id", "DESC")
+        ->join("proveedores", "proveedores.id", "proveedor")
+        ->orderBy("compras.id", "DESC")
         ->get();
         
         $proveedores = DB::connection('mysql')->table('proveedores')
-        ->orderBy("nombre", "DESC")
+        ->orderBy("nombre", "ASC")
         ->get();
 
         $totalCompradoHoy = DB::connection('mysql')->table('compras')
@@ -42,8 +43,7 @@ class ComprasController extends Controller
     public function guardarCompra(Request $request){
         $total = $request->input('total');
         $proveedor = $request->input('proveedor');
-        
-        $date = date("d-m-Y");
+        $date = $request->input('fecha_compra');
 
         DB::connection('mysql')->table('compras')
         ->insert([

@@ -71,7 +71,7 @@
     </div>
 
     <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
           <div class="modal-content">
             <form id="agregarManualForm" method="post">
                 @csrf
@@ -123,7 +123,7 @@
     </div>
 
     <div class="modal" id="modalConfirmarCompra" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-header">
               <h2 class="modal-title">Confirmar Compra</h2>
@@ -190,7 +190,7 @@
 
 
     <div class="modal fade" id="modalParaPesar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
           <div class="modal-content">
             <br>
             <form id="agregarProductoPeso" method="post">
@@ -208,8 +208,8 @@
                     <br>
                     <div class="row">
                         <div class="col-lg-6">
-                            <label style="font-size: 25px; font-weight: bold" for="cantidad_manual_peso">Peso en libras o kilos</label>
-                            <input autocomplete="off" style="font-size: 25px; font-weight: bold" required oninput="calcularPrecioPeso(this)" id="cantidad_manual_peso" name="cantidad" type="text" class="form-control" placeholder="peso en libras o kilos">
+                            <label style="font-size: 25px; font-weight: bold" for="cantidad_manual_peso">Peso en gramos</label>
+                            <input autocomplete="off" style="font-size: 25px; font-weight: bold" required oninput="calcularPrecioPeso(this)" id="cantidad_manual_peso" name="cantidad" type="text" class="form-control" placeholder="ej: 1200">
                         </div>
                         <div class="col-lg-6">
                             <label style="font-size: 25px; font-weight: bold" for="precio_peso">Precio a vender</label>
@@ -333,6 +333,7 @@
             $('#exampleModal').modal("show")
         }
 
+        var unidad_medida_obtenida = '';
         function verificarUnidad(){
             var codigo = document.getElementById('codigo').value;
             if (codigo === '') {
@@ -343,9 +344,10 @@
                     url: '/verificarUnidadProducto?codigo='+codigo,
                     type: 'GET',
                     success: function(response) {
-                        if(response.unidad_medida != "Libras" && response.unidad_medida != "Kilos"){
+                        if(response.unidad_medida != "Libras" && response.unidad_medida != "Kilos" && response.unidad_medida != "Gramos"){
                             agregarProductoVenta();
                         }else{
+                            unidad_medida_obtenida = response.unidad_medida;
                             $('#modalParaPesar').modal("show");
 
                             precio_seleccionado = response.precio_venta;
@@ -411,6 +413,19 @@
 
         function agregarProductoPeso(){
             var cantidad = document.getElementById("cantidad_manual_peso").value;
+            var cantidad_real = '';
+            if(unidad_medida_obtenida == "Kilos"){
+               cantidad_real = cantidad / 1000;
+            }else{
+                if (unidad_medida_obtenida == "Libras") {
+                    cantidad_real = cantidad / 1000;
+                }else{
+                    cantidad_real = cantidad;
+                }
+            }
+
+            var data_enviar = $('#agregarProductoPeso').serialize();
+            data_enviar = data_enviar.replace('cantidad='+cantidad, 'cantidad='+cantidad_real);
             if(cantidad == ""){
                 Swal.fire({
                     position: "center",
@@ -423,8 +438,9 @@
                 $.ajax({
                     url: '/productoDeVenta',
                     type: 'POST',
-                    data: $('#agregarProductoPeso').serialize(), 
+                    data: data_enviar, 
                     success: function(response) {
+                        unidad_medida_obtenida = '';
                         $("#codigo").val("").focus();
                         if(response.status != "error"){
                             location.reload();
@@ -571,7 +587,21 @@
         }
 
         function calcularPrecioPeso(element){
-            document.getElementById("precio_peso").value = redondearAl100(element.value * precio_seleccionado);
+            document.getElementById("precio_peso").value = '';
+            var valor_vender = 0;
+            if(unidad_medida_obtenida == "Kilos"){
+                var gramos_peso_real = element.value / 1000;
+                valor_vender = redondearAl100(gramos_peso_real * precio_seleccionado)
+            }else{
+                if (unidad_medida_obtenida == "Libras") {
+                    var gramos_peso_real = element.value / 500;
+                    valor_vender =  redondearAl100(gramos_peso_real * precio_seleccionado)
+                }else{
+                    valor_vender = redondearAl100(element.value * precio_seleccionado)
+                }
+            }
+
+            document.getElementById("precio_peso").value = valor_vender;
         }
 
         function calcularKilosPeso(element){

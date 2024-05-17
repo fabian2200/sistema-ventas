@@ -87,3 +87,6 @@ Route::get("/listar-categorias", "ProductosController@listarCategorias")->name("
 Route::post('/editar-producto-movil', 'ProductosController@updateMovil')->name("updateMovil");
 Route::get("/producto-cb", "ProductosController@productoCB")->name("productoCB");
 Route::post("/editar-inventario-movil", "ProductosController@modificarInventarioProductoMovil")->name("modificarInventarioProductoMovil");
+Route::post("/registrar-producto-movil", "ProductosController@registrarProductoMovil")->name("registrarProductoMovil");
+Route::get("/listar-categorias", "CategoriaController@listarCategorias")->name("listarCategorias");
+Route::get("/registrar-categoria-movil", "CategoriaController@guardarCategoriaMovil")->name("guardarCategoriaMovil");

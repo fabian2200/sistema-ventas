@@ -40,7 +40,7 @@
                 <table id="tabla_compras" class="table table-bordered">
                     <thead style="background-color: #91baee">
                         <tr>
-                            <th>Fecha</th>
+                            <th>Fecha de compra</th>
                             <th>Proveedor</th>
                             <th>Total</th>
                             <th>Borrar</th>
@@ -50,7 +50,7 @@
                     @foreach($compras as $venta)
                         <tr>
                             <td>{{$venta->fecha}}</td>
-                            <td>{{$venta->proveedor}}</td>
+                            <td>{{$venta->nombre}}</td>
                             <td>${{number_format($venta->total, 2)}}</td>
                             <td style="width: 100px; text-align: center">
                                 <form action="{{route("compras.eliminar")}}" method="post">
@@ -86,14 +86,27 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group">
-                                <label style="font-size: 20px" for="">Total a pagar</label>
-                                <input autocomplete="off" required name="total" style="font-size: 20px" class="form-control" type="text">
+                                <label style="font-size: 20px" for="">Fecha de la compra</label>
+                                <input autocomplete="off" required id="dateInput" style="font-size: 20px" class="form-control" type="date">
+                                <input autocomplete="off" required id="fecha_compra" name="fecha_compra" style="font-size: 20px" class="form-control" type="hidden">
                             </div>
-                        </div>
+                        </div>  
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label style="font-size: 20px" for="">Total a pagar</label>
+                                <input autocomplete="off" placeholder="$30.000" required name="total" style="font-size: 20px" class="form-control" type="number">
+                            </div>
+                        </div>                      
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label style="font-size: 20px" for="">Proveedor</label>
-                                <input autocomplete="off" required name="proveedor" style="font-size: 20px" class="form-control" type="text">
+                                <select style="font-size: 20px" name="proveedor" id="proveedor" class="form-control">
+                                   <option value="">Selecciona un proveedor</option>
+                                    @foreach ($proveedores as $item)
+                                        <option value="{{$item->id}}">{{$item->nombre}}</option>
+                                    @endforeach
+                                </select>
+                               
                             </div>
                         </div>
                        
@@ -134,6 +147,13 @@
                 }
             },
             ordering: false
+        });
+
+        document.getElementById('dateInput').addEventListener('change', function() {
+            var date = this.value;
+            const [year, month, day] = date.split("-");
+            const formattedDate = `${day}/${month}/${year}`;
+            document.getElementById('fecha_compra').value = formattedDate;
         });
     </script>
 @endsection

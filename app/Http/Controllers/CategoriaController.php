@@ -69,4 +69,39 @@ class CategoriaController extends Controller
     
         return response()->json($response);
     }
+
+    public function listarCategorias()
+    {
+        $categorias =  DB::connection('mysql')->table('categorias')->orderBy("categorias.nombre", "ASC")->get();
+        return response()->json($categorias);
+    }
+
+    public function guardarCategoriaMovil(Request $request){
+        $nombre = strtolower($request->input('nombre'));
+        
+        $existeCategoria = DB::connection('mysql')->table('categorias')
+        ->where('nombre', $nombre)
+        ->exists();
+
+        if (!$existeCategoria) {
+            DB::connection('mysql')->table('categorias')
+            ->insert([
+                'nombre' => $nombre,
+            ]);
+
+            $response = [
+                'success' => 1,
+                'mensaje' => 'La categoría ha sido creada exitosamente.'
+            ];
+
+        }else{
+            $response = [
+                'success' => 0,
+                'mensaje' => 'Ya existe una categoría con ese nombre'
+            ];
+        }
+
+        return response()->json($response);
+    }
+
 }

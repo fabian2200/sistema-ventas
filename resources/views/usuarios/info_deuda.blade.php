@@ -31,18 +31,20 @@
                 <table style="width: 100%">
                     <tr style="background-color: aquamarine">
                         <th style="width: 40%">Producto</th>
-                        <th style="width: 30%">Cantidad</th>
-                        <th style="width: 30%">Precio</th>
+                        <th style="width: 20%">Cantidad</th>
+                        <th style="width: 20%">Precio</th>
+                        <th style="width: 20%"> Subtotal </th>
                     </tr>
                     @foreach ($item->productos as $item2)
                         <tr>
                             <td>{{$item2->descripcion}}</td>
                             <td>{{$item2->cantidad}} {{$item2->unidad}}</td>
                             <td>$ {{number_format($item2->precio)}}</td>
+                            <td>$ {{number_format(round(($item2->cantidad * $item2->precio) / 100) * 100, 2)}}</td>
                         </tr>
                     @endforeach
                     <tr style="background-color: aquamarine">
-                        <th colspan="2">Total Factura</th>
+                        <th colspan="3">Total Factura</th>
                         <th>$ {{ number_format($item->total_pagar, 2) }}</th>
                     </tr>
                 </table>

@@ -29,6 +29,11 @@
                         <option value="3">Miscelánea</option>
                     </select>
                 </div>
+                <div class="form-group">
+                    <label class="label">Ip de la impresora</label>
+                    <input required autocomplete="off" name="ip_impresora" class="form-control"
+                           type="text" placeholder="Ej: 192.179.2.34">
+                </div>
                 @include("notificacion")
                 <button class="btn btn-success">Guardar</button>
                 <a class="btn btn-primary" href="{{route("usuarios.index")}}">Volver al listado</a>

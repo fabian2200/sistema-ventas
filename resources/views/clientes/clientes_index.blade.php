@@ -5,7 +5,8 @@
     <div class="row">
         <div class="col-12">
             <h1>Clientes <i class="fa fa-users"></i></h1>
-            <a href="{{route("clientes.create")}}" class="btn btn-success mb-2">Agregar</a>
+            <a style="font-size: 25px" href="{{route("clientes.create")}}" class="btn btn-success mb-2">Registrar nuevo cliente <i class="fas fa-user-plus"></i></a>
+            <hr>
             @include("notificacion")
             <div  class="table-responsive">
                 <table id="tabla_clientes_lista" class="table table-bordered">
@@ -13,7 +14,7 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Teléfono</th>
-
+                        <th>Valor Domicilio</th>
                         <th>Editar</th>
                         <th>Eliminar</th>
                     </tr>
@@ -23,6 +24,7 @@
                         <tr>
                             <td>{{$cliente->nombre}}</td>
                             <td>{{$cliente->telefono}}</td>
+                            <td>$ {{$cliente->valor_domi}}</td>
                             <td>
                                 <a class="btn btn-warning" href="{{route("clientes.edit",[$cliente])}}">
                                     <i class="fa fa-edit"></i>

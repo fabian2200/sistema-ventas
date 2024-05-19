@@ -2,7 +2,7 @@
 @section("titulo", "Ventas")
 @section("contenido")
     <br>
-    <h3 style="width: 100%; text-align: center"><strong>Ventas ({{session('user_tipo') == 1 ? 'Todo' : (session('user_tipo') == 2 ? 'Tienda' : "Miscelánea")}})</strong></h3>
+    <h1 style="width: 100%; text-align: left"><strong>Ventas ({{session('user_tipo') == 1 ? 'Todo' : (session('user_tipo') == 2 ? 'Tienda' : "Miscelánea")}})</strong></h1>
     <div class="row">
         <div class="col-lg-12">
             <div class="row">
@@ -48,6 +48,8 @@
                         <tr>
                             <th>Fecha</th>
                             <th>Cliente</th>
+                            <th>SubTotal</th>
+                            <th>Domicilio</th>
                             <th>Total</th>
                             <th style="text-align: center">Opciones</th>
                         </tr>
@@ -58,6 +60,8 @@
                             <td>{{$venta->created_at}}</td>
                             <td>{{$venta->cliente}}</td>
                             <td>${{number_format($venta->total_pagar, 2)}}</td>
+                            <td>${{number_format($venta->valor_domicilio, 2)}}</td>
+                            <td>${{number_format($venta->total_con_domi, 2)}}</td>
                             <td style="display: flex; justify-content: space-evenly; align-items: center;">
                                 <a type="button" class="btn btn-info"  onclick="ImprimirTicket({{$venta->id}})">
                                     <i class="fa fa-print"></i>

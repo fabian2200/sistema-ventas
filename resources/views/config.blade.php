@@ -23,15 +23,15 @@
                 </div>
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
+                        <span class="input-group-text"> <i class="fa fa-building"></i> </span>
                     </div>
-                    <input name="direccion" value="{{$negocio->direccion}}"  class="form-control" placeholder="Numero de telefono" type="number">
+                    <input name="direccion" value="{{$negocio->direccion}}"  class="form-control" placeholder="Numero de telefono" type="text">
                 </div>
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text"> <i class="fa fa-building"></i> </span>
+                        <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
                     </div>
-                    <input name="telefono" value="{{$negocio->telefono}}" class="form-control" placeholder="Direccion del negocio" type="text">
+                    <input name="telefono" value="{{$negocio->telefono}}" class="form-control" placeholder="Direccion del negocio" type="number">
                 </div>
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
@@ -44,6 +44,12 @@
                         <span class="input-group-text"> <i class="fas fa-user-tie"></i> </span>
                     </div>
                     <input name="propietario" value="{{$negocio->propietario}}" class="form-control" placeholder="Nombre del Propietario" type="text">
+                </div>      
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fas fa-qrcode"></i> </span>
+                    </div>
+                    <input name="resolucion" value="{{$negocio->resolucion}}" class="form-control" placeholder="Resolución del negocio" type="text">
                 </div>                                
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block"> Guardar Cambios </button>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\Printer;
+use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 use Codedge\Fpdf\Fpdf\Fpdf;
 use App\Cliente;
 
@@ -16,18 +17,25 @@ class VentasController extends Controller
     public function ticket($idVenta, $imprimir_factura){
         $venta = Venta::findOrFail($idVenta);
 
+        $negocio = DB::connection('mysql')->table('negocio')->first();
+        $usuario = DB::connection('mysql')->table('users')->where('id', session('user_id'))->first();
+        $ipImpresora = $usuario->ip_impresora;
+        $puertoImpresora = env("PUERTO_IMPRESORA");
+
         if($imprimir_factura == "si"){
-            $nombreImpresora = env("NOMBRE_IMPRESORA");
-            $connector = new WindowsPrintConnector($nombreImpresora);
+            $connector = new NetworkPrintConnector($ipImpresora, $puerto);
             $impresora = new Printer($connector);
             $impresora->setJustification(Printer::JUSTIFY_CENTER);
             $impresora->setEmphasis(true);
-            $impresora->text("Ticket de venta\n");
-            $impresora->text("Provisiones Carlos Andres\n");
-            $impresora->text("NIT 12435619\n");
-            $impresora->text("CRA 15 #13B Bis - 62\n");
-            $impresora->text("Brr. Alfonso Lopez\n");
+            $impresora->text("Ticket de venta: #".$idVenta."\n");
             $impresora->text($venta->created_at . "\n");
+            $impresora->text($negocio->nombre."\n");
+            $impresora->text("NIT ".$negocio->nit."\n");
+            $impresora->text($negocio->direccion."\n");
+            $impresora->text("Barrio ".$negocio->barrio."\n");
+            $impresora->text("Cel: ".$negocio->telefono."\n");
+            $impresora->text("Resolución \n");
+            $impresora->text($negocio->resolucion."\n");
             $impresora->setEmphasis(false);
             $impresora->text("Cliente: ");
             $impresora->text($venta->cliente->nombre . "\n");
@@ -46,12 +54,13 @@ class VentasController extends Controller
             $impresora->text("\n===============================\n");
             $impresora->setJustification(Printer::JUSTIFY_RIGHT);
             $impresora->setEmphasis(true);
-            $impresora->setTextSize(3, 3); 
-            $impresora->text("Total: $" . self::redondearAl100($total) . "\n");
+            $impresora->setTextSize(2, 2); 
+            $impresora->text("Subtotal: $" . self::redondearAl100($total) . "\n");
+            $impresora->text("Domicilio: $" . self::redondearAl100($venta->valor_domicilio) . "\n");
+            $impresora->text("Total: $" . self::redondearAl100($venta->total_con_domi) . "\n");
             $impresora->setJustification(Printer::JUSTIFY_CENTER);
             $impresora->setTextSize(1, 1);
             $impresora->text("Gracias por su compra\n");
-            $impresora->text("\nVentSOFT By Ing. Fabian Quintero\n");
             $impresora->feed(10);
             
             $impresora->pulse();
@@ -66,17 +75,24 @@ class VentasController extends Controller
         $idVenta = $request->input("id_venta");
         $venta = Venta::findOrFail($idVenta);
 
-        $nombreImpresora = env("NOMBRE_IMPRESORA");
-        $connector = new WindowsPrintConnector($nombreImpresora);
+        $negocio = DB::connection('mysql')->table('negocio')->first();
+        $usuario = DB::connection('mysql')->table('users')->where('id', session('user_id'))->first();
+        $ipImpresora = $usuario->ip_impresora;
+        $puertoImpresora = env("PUERTO_IMPRESORA");
+
+        $connector = new NetworkPrintConnector($ipImpresora, $puerto);
         $impresora = new Printer($connector);
         $impresora->setJustification(Printer::JUSTIFY_CENTER);
         $impresora->setEmphasis(true);
-        $impresora->text("Ticket de venta\n");
-        $impresora->text("Provisiones Carlos Andres\n");
-        $impresora->text("NIT 12435619\n");
-        $impresora->text("CRA 15 #13B Bis - 62\n");
-        $impresora->text("Brr. Alfonso Lopez\n");
+        $impresora->text("Ticket de venta: #".$idVenta."\n");
         $impresora->text($venta->created_at . "\n");
+        $impresora->text($negocio->nombre."\n");
+        $impresora->text("NIT ".$negocio->nit."\n");
+        $impresora->text($negocio->direccion."\n");
+        $impresora->text("Barrio ".$negocio->barrio."\n");
+        $impresora->text("Cel: ".$negocio->telefono."\n");
+        $impresora->text("Resolución \n");
+        $impresora->text($negocio->resolucion."\n");
         $impresora->setEmphasis(false);
         $impresora->text("Cliente: ");
         $impresora->text($venta->cliente->nombre . "\n");
@@ -95,12 +111,13 @@ class VentasController extends Controller
         $impresora->text("\n===============================\n");
         $impresora->setJustification(Printer::JUSTIFY_RIGHT);
         $impresora->setEmphasis(true);
-        $impresora->setTextSize(3, 3);
-        $impresora->text("Total: $" . self::redondearAl100($total) . "\n");
+        $impresora->setTextSize(2, 2);
+        $impresora->text("Subtotal: $" . self::redondearAl100($total) . "\n");
+        $impresora->text("Domicilio: $" . self::redondearAl100($venta->valor_domicilio) . "\n");
+        $impresora->text("Total: $" . self::redondearAl100($venta->total_con_domi) . "\n");
         $impresora->setJustification(Printer::JUSTIFY_CENTER);
         $impresora->setTextSize(1, 1);
         $impresora->text("Gracias por su compra\n");
-        $impresora->text("\nVentSOFT By Ing. Fabian Quintero\n");
         $impresora->feed(10);
         $impresora->close();
         return response()->json(["mensaje" => "Ticket de venta impreso correctamente!"]);

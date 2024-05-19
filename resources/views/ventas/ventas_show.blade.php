@@ -37,11 +37,21 @@
                 @endforeach
                 </tbody>
                 <tfoot>
-                <tr>
-                    <td colspan="3"></td>
-                    <td style="background-color: aquamarine"><strong>Total</strong></td>
-                    <td style="background-color: aquamarine">${{round($total / 100) * 100}}</td>
-                </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                        <td style="background-color: aquamarine"><strong>SubTotal</strong></td>
+                        <td style="background-color: aquamarine">${{round($total / 100) * 100}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                        <td style="background-color: aquamarine"><strong>Domicilio</strong></td>
+                        <td style="background-color: aquamarine">${{round($venta->valor_domicilio / 100) * 100}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                        <td style="background-color: aquamarine"><strong>Total</strong></td>
+                        <td style="background-color: aquamarine">${{round($venta->total_con_domi / 100) * 100}}</td>
+                    </tr>
                 </tfoot>
             </table>
             <br><br><br>

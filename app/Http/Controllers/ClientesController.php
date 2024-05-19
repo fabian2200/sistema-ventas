@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Cliente;
 use Illuminate\Http\Request;
+use DB;
 
 class ClientesController extends Controller
 {
@@ -85,5 +86,15 @@ class ClientesController extends Controller
     {
         $cliente->delete();
         return redirect()->route("clientes.index")->with("mensaje", "Cliente eliminado");
+    }
+
+    public function precioDomi(Request $request){
+        $id_cliente = $request->post("id_cliente");
+
+        $precio_domi = DB::connection('mysql')->table('clientes')->where('id', $id_cliente)->first();
+
+        return response()->json([
+            'precio_domicilio' => $precio_domi->valor_domi,
+        ]);
     }
 }

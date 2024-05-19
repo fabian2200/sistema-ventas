@@ -39,7 +39,7 @@ class HomeController extends Controller
         $telefono = $request->input('telefono');
         $barrio = $request->input('barrio');
         $propietario = $request->input('propietario');
-        
+        $resolucion = $request->input('resolucion');
 
         DB::connection('mysql')->table('negocio')
         ->where('id', 1)
@@ -50,6 +50,7 @@ class HomeController extends Controller
             'telefono' => $telefono,
             'barrio' => $barrio,
             'propietario' => $propietario,
+            'resolucion' => $resolucion,
         ]);
 
         $negocio = DB::connection('mysql')->table('negocio')->first();

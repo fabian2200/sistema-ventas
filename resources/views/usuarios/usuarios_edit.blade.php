@@ -1,7 +1,7 @@
 @extends("maestra")
 @section("titulo", "Editar usuario")
 @section("contenido")
-    <div class="row">
+    <div class="row" style="padding: 20px">
         <div class="col-12">
             <h1>Editar usuario</h1>
             <form method="POST" action="{{route("usuarios.update", [$usuario])}}">
@@ -29,6 +29,11 @@
                         <option @if($usuario->tipo == 2) selected @endif value="2">Tienda</option>
                         <option @if($usuario->tipo == 3) selected @endif value="3">Miscelánea</option>
                     </select>
+                </div>
+                <div class="form-group">
+                    <label class="label">Ip de la impresora</label>
+                    <input required value="{{$usuario->ip_impresora}}" autocomplete="off" name="ip_impresora" class="form-control"
+                           type="text" placeholder="Ej: 192.179.2.34">
                 </div>
                 @include("notificacion")
                 <button class="btn btn-success">Guardar</button>

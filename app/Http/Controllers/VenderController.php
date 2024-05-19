@@ -34,6 +34,8 @@ class VenderController extends Controller
         $venta->fecha_venta = date("Y-m-d");
         $venta->id_vendedor = session('user_id');
         $venta->tipo_venta = session('user_tipo');
+        $venta->total_con_domi = (double) $request->input("total_pagar_con_domi");
+        $venta->valor_domicilio = $venta->total_con_domi - $venta->total_pagar;
         $venta->saveOrFail();
 
         if($venta->total_fiado > 0){
@@ -246,7 +248,7 @@ class VenderController extends Controller
     public function index()
     {
         return view("vender.vender",[
-            "clientes" => Cliente::all(),
+            "clientes" => Cliente::orderBy('nombre', 'asc')->get(),
         ]);
     }
 

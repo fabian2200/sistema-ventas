@@ -76,6 +76,8 @@ Route::middleware("auth")
         Route::post("/guardarProveedor", "ProveedorController@guardarProveedor")->name("guardarProveedor");
         Route::post("/editarProveedor", "ProveedorController@editarProveedor")->name("editarProveedor");
         Route::get("/eliminarProveedor", "ProveedorController@eliminarProveedor")->name("eliminarProveedor");
+        Route::get("/precio-domi", "ClientesController@precioDomi")->name("precioDomi");
+
     }
 );
 

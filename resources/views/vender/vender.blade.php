@@ -2,6 +2,7 @@
 @section("titulo", "Realizar venta")
 @section("contenido")
 <br>
+<h1 style="width: 100%; text-align: left; color: red"><strong>Esta vendiendo como:  ({{session('user_tipo') == 1 ? 'Administrador' : (session('user_tipo') == 2 ? 'Tienda' : "Miscelánea")}})</strong></h1>
     <div class="row">
         <div class="col-12">
             <div class="row">
@@ -93,13 +94,14 @@
                     <input id="codigo_barras" autocomplete="off" required name="codigo" type="hidden"class="form-control">
                     <br>
                     <div class="row">
+                        
+                        <div class="col-lg-6">
+                            <label style="font-size: 25px; font-weight: bold" for="cantidad_manual">Gramos o Unidades</label>
+                            <input autocomplete="off" style="color: white !important; font-size: 25px; font-weight: bold; background-color: #ed7a18" required oninput="calcularPrecio(this)" id="cantidad_manual" name="cantidad" type="text" class="form-control" placeholder="Gramos o unidades">
+                        </div>
                         <div class="col-lg-6">
                             <label style="font-size: 25px; font-weight: bold" for="precio">Precio a vender</label>
                             <input autocomplete="off" style="font-size: 25px; font-weight: bold" required oninput="calcularKilos(this)" id="precio" name="precio" type="text" class="form-control" placeholder="precio de venta">
-                        </div>
-                        <div class="col-lg-6">
-                            <label style="font-size: 25px; font-weight: bold" for="cantidad_manual">Peso o Unidades</label>
-                            <input autocomplete="off" style="font-size: 25px; font-weight: bold" required oninput="calcularPrecio(this)" id="cantidad_manual" name="cantidad" type="text" class="form-control" placeholder="peso en o unidades">
                         </div>
                     </div>
                     <hr>
@@ -125,19 +127,14 @@
     <div class="modal" id="modalConfirmarCompra" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
-            <div class="modal-header">
-              <h2 class="modal-title">Confirmar Compra</h2>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
             <div class="modal-body">
                 <form id="terminarCancelarVenta"  method="post">
                     @csrf
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group">
-                                <select style="font-size: 20px;" name="id_cliente" class="form-control" id="cliente">
+                                <label style="font-size: 20px" for="">Cliente</label>
+                                <select style="width: 100%;" class="form-control selectpicker" data-live-search="true" name="id_cliente" required id="cliente">
                                     @foreach($clientes as $cliente)
                                         <option value="{{$cliente->id}}">{{$cliente->nombre}}</option>
                                     @endforeach
@@ -146,9 +143,31 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label style="font-size: 20px" for="">Total a pagar</label>
+                                <label style="font-size: 20px" for="">Subtotal</label>
                                 <input id="total_pagar_tv" autocomplete="off" required name="total_pagar" style="font-size: 20px" class="form-control" type="text">
                             </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label style="font-size: 20px" for="">Precio Domicilio</label>
+                                    <input autocomplete="off" id="precio_domicilio" required name="precio_domicilio" style="font-size: 20px" class="form-control" type="text" value="0">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label style="font-size: 20px" for="">Total a Pagar</label>
+                                <input style="background-color: aqua; font-size: 20px; font-weight: bold" id="total_pagar_con_domi" autocomplete="off" required name="total_pagar_con_domi"  class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label style="font-size: 20px" for="">Total Efectivo Paga</label>
+                                <input style="background-color: chartreuse; font-size: 20px; font-weight: bold" autocomplete="off" id="total_dinero" required name="total_dinero" oninput="calcularCambio(this)" class="form-control" type="number">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
                             <div class="form-group">
                                 <label style="font-size: 20px" for="">Total Cambio</label>
                                 <input autocomplete="off" required name="total_vueltos" id="vueltos" style="font-size: 20px" class="form-control" type="text">
@@ -156,23 +175,20 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label style="font-size: 20px" for="">Total Dinero</label>
-                                <input autocomplete="off" id="total_dinero" required name="total_dinero" oninput="calcularCambio(this)" style="font-size: 20px" class="form-control" type="number">
-                            </div>
-                            <div class="form-group">
                                 <label style="font-size: 20px" for="">Total Fiado</label>
                                 <input autocomplete="off" id="fiado" required name="total_fiado" style="font-size: 20px" class="form-control" type="currency">
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="form-group">
                                 <label style="font-size: 20px" for="">Imprimir factura</label>
-                                <select name="imprimir_factura" id="imprimir_factura" class="form-control">
+                                <select style="font-size: 20px" name="imprimir_factura" id="imprimir_factura" class="form-control">
                                     <option value="no">no</option>
                                     <option value="si">si</option>
                                 </select>
                             </div>
                         </div>
+                       
                         <input type="hidden" name="accion" value="terminar" >
                         <hr>
                         <div class="col-lg-12">
@@ -315,6 +331,14 @@
             });
 
             document.getElementById("etiqueta_nombre").innerHTML = nombre_producto;
+
+            $.ajax({
+                url: '/verificarUnidadProducto?codigo='+item,
+                type: 'GET',
+                success: function(response) {
+                    unidad_medida_obtenida = response.unidad_medida;
+                }
+            });
         }
 
         function calcularKilos(element){
@@ -324,7 +348,24 @@
         }
 
         function calcularPrecio(element){
-            document.getElementById("precio").value = (element.value * precio_seleccionado).toFixed(3);
+            var valor_vender = 0;
+            if(unidad_medida_obtenida == "Kilos"){
+                var gramos_peso_real = element.value / 1000;
+                valor_vender = redondearAl100(gramos_peso_real * precio_seleccionado)
+            }else{
+                if (unidad_medida_obtenida == "Libras") {
+                    var gramos_peso_real = element.value / 500;
+                    valor_vender =  redondearAl100(gramos_peso_real * precio_seleccionado)
+                }else{
+                    if(unidad_medida_obtenida == "Gramos"){
+                        valor_vender = redondearAl100(element.value * precio_seleccionado)
+                    }else{
+                        valor_vender = redondearAl100(element.value * precio_seleccionado)
+                    }
+                }
+            }
+
+            document.getElementById("precio").value = valor_vender;
         }
 
         
@@ -385,6 +426,24 @@
 
         function agregarProductoVentaManual(){
             var cantidad = document.getElementById("cantidad_manual").value;
+            var cantidad_real = '';
+            if(unidad_medida_obtenida == "Kilos"){
+               cantidad_real = cantidad / 1000;
+            }else{
+                if (unidad_medida_obtenida == "Libras") {
+                    cantidad_real = cantidad / 1000;
+                }else{
+                    if(unidad_medida_obtenida == "Gramos"){
+                        cantidad_real = cantidad;
+                    }else{
+                        cantidad_real = cantidad;
+                    }
+                }
+            }
+
+            var data_enviar = $('#agregarManualForm').serialize();
+            data_enviar = data_enviar.replace('cantidad='+cantidad, 'cantidad='+cantidad_real);
+
             if(cantidad == ""){
                 Swal.fire({
                     position: "center",
@@ -397,7 +456,7 @@
                 $.ajax({
                     url: '/productoDeVenta',
                     type: 'POST',
-                    data: $('#agregarManualForm').serialize(), 
+                    data: data_enviar, 
                     success: function(response) {
                         $("#codigo").val("").focus();
                         if(response.status != "error"){
@@ -485,7 +544,28 @@
                     }
                 }
             });
+
+            $('.selectpicker').selectpicker();
+
+            document.getElementById("cliente").onchange = function() {
+                var selectedOption = this.value;
+                buscarPrecioDomi(selectedOption);
+            };
         });
+
+        function buscarPrecioDomi(id_cliente){
+            var precio_domicilio = 0;
+            $.ajax({
+                url: '/precio-domi?id_cliente='+id_cliente,
+                method: 'GET',
+                dataType: 'json',
+                success: function (datos) {
+                    precio_domicilio = datos.precio_domicilio;
+                    document.getElementById("precio_domicilio").value = precio_domicilio;
+                    calcularCambio2(precio_domicilio);
+                }
+            });
+        }
 
         function mapearTablaProductos(){
             $.ajax({
@@ -500,6 +580,7 @@
 
                     document.getElementById("total_pagar").innerHTML = total.toLocaleString('es-CO', { style: 'currency', currency: 'COP' });;
                     document.getElementById("total_pagar_tv").value = total;
+                    document.getElementById("total_pagar_con_domi").value = total;
 
                     productos.forEach(function(producto, index) {
                         var row = '<tr>' +
@@ -577,8 +658,30 @@
         }
 
         function calcularCambio(element){
-            var valor = (-1) * (total - element.value).toFixed(3)
+            let total_con_domi = document.getElementById("total_pagar_con_domi").value;
+            var valor = (-1) * (total_con_domi - element.value).toFixed(3)
             document.getElementById("vueltos").value = valor;
+            if(valor < 0){
+                document.getElementById("fiado").value = (-1) * valor;
+            }else{
+                document.getElementById("fiado").value = 0;
+            }
+        }
+
+        function calcularCambio2(precio_domi_par){
+            let subtotal = total;
+            let total_con_domi = subtotal + parseFloat(precio_domi_par);
+
+            let total_dinero_pagar = document.getElementById("total_dinero").value;
+
+            if(total_dinero_pagar == ""){
+                total_dinero_pagar = 0;
+            }
+            
+            let valor = (-1) * (total_con_domi - total_dinero_pagar).toFixed(3);
+            document.getElementById("total_pagar_con_domi").value = total_con_domi;
+            document.getElementById("vueltos").value = valor;
+
             if(valor < 0){
                 document.getElementById("fiado").value = (-1) * valor;
             }else{
@@ -727,6 +830,5 @@
             }, 500);
            
         }
-
     </script>
 @endsection

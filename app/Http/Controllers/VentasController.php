@@ -23,7 +23,7 @@ class VentasController extends Controller
         $puertoImpresora = env("PUERTO_IMPRESORA");
 
         if($imprimir_factura == "si"){
-            $connector = new NetworkPrintConnector($ipImpresora, $puerto);
+            $connector = new NetworkPrintConnector($ipImpresora, $puertoImpresora);
             $impresora = new Printer($connector);
             $impresora->setJustification(Printer::JUSTIFY_CENTER);
             $impresora->setEmphasis(true);
@@ -34,10 +34,8 @@ class VentasController extends Controller
             $impresora->text($negocio->direccion."\n");
             $impresora->text("Barrio ".$negocio->barrio."\n");
             $impresora->text("Cel: ".$negocio->telefono."\n");
-            $impresora->text("Resolución \n");
-            $impresora->text($negocio->resolucion."\n");
             $impresora->setEmphasis(false);
-            $impresora->text("Cliente: ");
+            $impresora->text("\nCliente: ");
             $impresora->text($venta->cliente->nombre . "\n");
             $impresora->text("\nDetalle de la compra\n");
             $impresora->text("\n===============================\n");
@@ -54,13 +52,13 @@ class VentasController extends Controller
             $impresora->text("\n===============================\n");
             $impresora->setJustification(Printer::JUSTIFY_RIGHT);
             $impresora->setEmphasis(true);
-            $impresora->setTextSize(2, 2); 
-            $impresora->text("Subtotal: $" . self::redondearAl100($total) . "\n");
+            $impresora->setTextSize(1, 1); 
+            $impresora->text("\nSubtotal: $" . self::redondearAl100($total) . "\n");
             $impresora->text("Domicilio: $" . self::redondearAl100($venta->valor_domicilio) . "\n");
             $impresora->text("Total: $" . self::redondearAl100($venta->total_con_domi) . "\n");
             $impresora->setJustification(Printer::JUSTIFY_CENTER);
             $impresora->setTextSize(1, 1);
-            $impresora->text("Gracias por su compra\n");
+            $impresora->text("\nGracias por su compra\n");
             $impresora->feed(10);
             
             $impresora->pulse();
@@ -80,7 +78,7 @@ class VentasController extends Controller
         $ipImpresora = $usuario->ip_impresora;
         $puertoImpresora = env("PUERTO_IMPRESORA");
 
-        $connector = new NetworkPrintConnector($ipImpresora, $puerto);
+        $connector = new NetworkPrintConnector($ipImpresora, $puertoImpresora);
         $impresora = new Printer($connector);
         $impresora->setJustification(Printer::JUSTIFY_CENTER);
         $impresora->setEmphasis(true);
@@ -91,10 +89,8 @@ class VentasController extends Controller
         $impresora->text($negocio->direccion."\n");
         $impresora->text("Barrio ".$negocio->barrio."\n");
         $impresora->text("Cel: ".$negocio->telefono."\n");
-        $impresora->text("Resolución \n");
-        $impresora->text($negocio->resolucion."\n");
         $impresora->setEmphasis(false);
-        $impresora->text("Cliente: ");
+        $impresora->text("\nCliente: ");
         $impresora->text($venta->cliente->nombre . "\n");
         $impresora->text("\nDetalle de la compra\n");
         $impresora->text("\n===============================\n");
@@ -111,13 +107,13 @@ class VentasController extends Controller
         $impresora->text("\n===============================\n");
         $impresora->setJustification(Printer::JUSTIFY_RIGHT);
         $impresora->setEmphasis(true);
-        $impresora->setTextSize(2, 2);
-        $impresora->text("Subtotal: $" . self::redondearAl100($total) . "\n");
+        $impresora->setTextSize(1, 1);
+        $impresora->text("\nSubtotal: $" . self::redondearAl100($total) . "\n");
         $impresora->text("Domicilio: $" . self::redondearAl100($venta->valor_domicilio) . "\n");
         $impresora->text("Total: $" . self::redondearAl100($venta->total_con_domi) . "\n");
         $impresora->setJustification(Printer::JUSTIFY_CENTER);
         $impresora->setTextSize(1, 1);
-        $impresora->text("Gracias por su compra\n");
+        $impresora->text("\nGracias por su compra\n");
         $impresora->feed(10);
         $impresora->close();
         return response()->json(["mensaje" => "Ticket de venta impreso correctamente!"]);

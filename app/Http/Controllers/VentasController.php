@@ -228,8 +228,9 @@ class VentasController extends Controller
     {
         $total = 0;
         foreach ($venta->productos as $producto) {
-            $total += $producto->cantidad * $producto->precio;
+            $total += self::redondearAl100($producto->cantidad * $producto->precio);
         }
+
         return view("ventas.ventas_show", [
             "venta" => $venta,
             "total" => $total,

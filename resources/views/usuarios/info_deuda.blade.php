@@ -24,7 +24,7 @@
                     <div class="col-lg-12">
                         <h2 style="color: rgb(42, 54, 165); font-weight: bold; margin-bottom: 0px">Factura # {{$item->id}}</h2>
                         <h6 style="color: rgb(4, 6, 22); font-weight: bold">Fecha {{$item->fecha_venta}}</h6>
-                        <h4 style="color: rgb(165, 42, 42); font-weight: bold">Total Fiado en esta factura $ {{$item->total_fiado}}</h4>
+                        <h4 style="color: rgb(165, 42, 42); font-weight: bold">Total Fiado en esta factura $ {{number_format($item->total_fiado,2)}}</h4>
                     </div>
                 </div>
                 <br>
@@ -38,12 +38,12 @@
                         <tr>
                             <td>{{$item2->descripcion}}</td>
                             <td>{{$item2->cantidad}} {{$item2->unidad}}</td>
-                            <td>$ {{$item2->precio}}</td>
+                            <td>$ {{number_format($item2->precio)}}</td>
                         </tr>
                     @endforeach
                     <tr style="background-color: aquamarine">
                         <th colspan="2">Total Factura</th>
-                        <th>$ {{ $item->total_pagar }}</th>
+                        <th>$ {{ number_format($item->total_pagar, 2) }}</th>
                     </tr>
                 </table>
                 <br>
@@ -53,10 +53,10 @@
            @endforeach
            <div class="row" style="width: 100%; padding-left: 15%; padding-right: 15%">
                 <div class="col-lg-6">
-                    <h2 style="color: rgb(250, 0, 0); font-weight: bold">&nbsp;&nbsp;Total Fiado ${{$cliente->total_fiado}}</h2>
-                    <h2 style="color: rgb(11, 99, 33); font-weight: bold">- Total Abonado ${{$cliente->total_abonado}}</h2>
+                    <h2 style="color: rgb(250, 0, 0); font-weight: bold">&nbsp;&nbsp;Total Fiado ${{number_format($cliente->total_fiado, 2)}}</h2>
+                    <h2 style="color: rgb(11, 99, 33); font-weight: bold">- Total Abonado ${{number_format($cliente->total_abonado, 2)}}</h2>
                     <hr>
-                    <h2 style="color: rgb(2, 2, 2); font-weight: bold">&nbsp;&nbsp;&nbsp;Deuda Total ${{$cliente->total_deuda}}</h2>
+                    <h2 style="color: rgb(2, 2, 2); font-weight: bold">&nbsp;&nbsp;&nbsp;Deuda Total ${{number_format($cliente->total_deuda, 2)}}</h2>
                 </div>
             </div>
         </div>

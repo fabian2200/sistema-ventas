@@ -86,6 +86,11 @@ Route::middleware("auth")
         Route::post("/realizar-movimiento", "RecargasController@guardarMovimiento")->name("recarga.guardarMovimiento");
         Route::post("/editar-movimiento", "RecargasController@editarMovimiento")->name("recarga.editarMovimiento");
         Route::get("/eliminar-movimiento", "RecargasController@eliminarMovimiento")->name("recarga.eliminarMovimiento");
+    
+        Route::get("/codigos", "BarcodeController@index")->name("codigos.index");
+        Route::post("/guardar-codigo", "BarcodeController@generateBarcode")->name("codigos.generateBarcode");
+        Route::get("/eliminar-codigo", "BarcodeController@eliminarCodigo")->name("codigos.eliminarCodigo");
+        Route::post("/editar-codigo", "BarcodeController@editarCodigo")->name("codigos.editarCodigo");
     }
 );
 

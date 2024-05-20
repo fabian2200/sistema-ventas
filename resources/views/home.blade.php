@@ -23,8 +23,6 @@
                 @endforeach
                 <div class="col-md-1" style="margin-top: 20px">
                 </div>
-                <div class="col-md-1" style="margin-top: 20px">
-                </div>
                 <div class="col-md-2" style="margin-top: 20px">
                     <div class="card" style="align-items: center; border: none; margin: 20px;">
                         <a style="width: 210px; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" href="{{route("$modulo.deudores")}}" class="btn btn-danger">
@@ -65,7 +63,13 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-md-1" style="margin-top: 20px">
+                <div class="col-md-2" style="margin-top: 20px">
+                    <div class="card" style="align-items: center; border: none; margin: 20px;">
+                        <a href="{{route("codigos.index")}}" style="width: 210px; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" class="btn btn-negro">
+                            <img style="height: 120px; width: fit-content; padding: 15px" class="card-img-top" src="/img/codigo_barra.png">
+                            <h5 style="font-weight: bolder;">código de Barra</h5> 
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

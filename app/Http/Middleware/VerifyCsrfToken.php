@@ -15,10 +15,12 @@ class VerifyCsrfToken extends Middleware
         '/realizar-recarga',
         '/realizar-movimiento',
         '/editar-recarga',
+        '/editar-movimiento',
+        '/guardar-codigo',
+        '/editar-codigo',
         '/terminarVentaDomicilio',
         '/editar-producto-movil',
         '/editar-inventario-movil',
         '/registrar-producto-movil',
-        '/editar-movimiento'
     ];
 }

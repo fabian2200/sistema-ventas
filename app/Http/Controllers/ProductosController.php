@@ -415,7 +415,7 @@ class ProductosController extends Controller
             'codigo_barras' => $codigo_nuevo
         ]);
 
-        self::modificarCodigoProductoNube($codigo_anterior, $codigo_nuevo);
+        //self::modificarCodigoProductoNube($codigo_anterior, $codigo_nuevo);
         return redirect()->route("productos.index")->with("mensaje", "Código de barras actualizado");
     }
 

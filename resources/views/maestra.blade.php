@@ -159,6 +159,17 @@
             color: #fff
         }
 
+        .btn-negro {
+            background-color: #272727ed !important;
+            border-color: #000000ed !important;
+            color: #fff
+        }
+
+        .btn-negro:hover {
+            background-color: #000000ed !important;
+            color: #fff
+        }
+
         .btn-morado:hover{
             background-color: #5b17e2 !important;
             color: white 

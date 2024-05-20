@@ -10,11 +10,11 @@
     <link href="{{url("/css/all.min.css")}}" rel="stylesheet">
     <link href="{{url("/css/jquery.dataTables.min.css")}}" rel="stylesheet">
     <link href="{{url("/select_search/select2.min.css")}}" rel="stylesheet">
-    <link href="{{url("/css/bootstrap-select.min.css")}}" rel="stylesheet">
+    <link href="{{url("/select_mio/bootstrap-select.min.css")}}" rel="stylesheet">
     <script src="{{url("/css/sweetalert.js")}}"></script>
     <script src="{{url("/js/jquery-3.7.0.js")}}"></script>
     <script src="{{url("/js/jquery.dataTables.min.js")}}"></script>
-    <script src="{{url("/js/bootstrap-select.min.js")}}"></script>
+    <script src="{{url("/select_mio/bootstrap-select.min.js")}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
    
@@ -137,6 +137,28 @@
             border-color: #6202ff !important;
         }
 
+        .btn-azul {
+            color: #fff;
+            background-color: #285ab6 !important;
+            border-color: #173b7e !important;
+        }
+
+        .btn-azul:hover {
+            color: #fff;
+            background-color: #173b7e !important;
+        }
+
+        .btn-rosado {
+            background-color: #ff4dc8ed !important;
+            border-color: #ee0da7ed !important;
+            color: #fff
+        }
+
+        .btn-rosado:hover {
+            background-color: #ee0da7ed !important;
+            color: #fff
+        }
+
         .btn-morado:hover{
             background-color: #5b17e2 !important;
             color: white 
@@ -208,6 +230,12 @@
         .bs-searchbox ul {
             display: block !important;
         }
+
+        .buttons-excel {
+            background-color: green !important;
+            color: #fff !important;
+            font-size: 15px !important;
+        }
     </style>
 </head>
 <body>
@@ -238,12 +266,6 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{route("vender.index")}}">Vender&nbsp;<i class="fa fa-cart-plus"></i></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route("ventas.index")}}">Ventas&nbsp;<i class="fa fa-list"></i></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route("usuarios.index")}}">Usuarios&nbsp;<i class="fa fa-users"></i></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{route("clientes.index")}}">Clientes&nbsp;<i class="fa fa-users"></i></a>

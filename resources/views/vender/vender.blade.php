@@ -97,7 +97,7 @@
                         
                         <div class="col-lg-6">
                             <label style="font-size: 25px; font-weight: bold" for="cantidad_manual">Gramos o Unidades</label>
-                            <input autocomplete="off" style="color: white !important; font-size: 25px; font-weight: bold; background-color: #ed7a18" required oninput="calcularPrecio(this)" id="cantidad_manual" name="cantidad" type="text" class="form-control" placeholder="Gramos o unidades">
+                            <input autocomplete="off" style="color: black !important; font-size: 25px; font-weight: bold; background-color: #ffd8b6" required oninput="calcularPrecio(this)" id="cantidad_manual" name="cantidad" type="text" class="form-control" placeholder="Gramos o unidades">
                         </div>
                         <div class="col-lg-6">
                             <label style="font-size: 25px; font-weight: bold" for="precio">Precio a vender</label>

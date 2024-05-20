@@ -13,7 +13,7 @@ class ComprasController extends Controller
     public function index()
     {        
      
-        $date = date("d-m-Y");
+        $date = date("d/m/Y");
 
         $compras = DB::connection('mysql')->table('compras')
         ->join("proveedores", "proveedores.id", "proveedor")

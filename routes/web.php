@@ -78,6 +78,14 @@ Route::middleware("auth")
         Route::get("/eliminarProveedor", "ProveedorController@eliminarProveedor")->name("eliminarProveedor");
         Route::get("/precio-domi", "ClientesController@precioDomi")->name("precioDomi");
 
+        Route::get("/recargas", "RecargasController@index")->name("recarga.index");
+        Route::post("/realizar-recarga", "RecargasController@guardarRecargaPaquete")->name("recarga.guardarRecargaPaquete");
+        Route::post("/editar-recarga", "RecargasController@editarRecargaPaquete")->name("recarga.editarRecargaPaquete");
+        Route::get("/eliminar-recarga", "RecargasController@eliminarRecargaPaquete")->name("recarga.eliminarRecargaPaquete");
+        Route::get("/consignacion-retiro", "RecargasController@index2")->name("recarga.index2");
+        Route::post("/realizar-movimiento", "RecargasController@guardarMovimiento")->name("recarga.guardarMovimiento");
+        Route::post("/editar-movimiento", "RecargasController@editarMovimiento")->name("recarga.editarMovimiento");
+        Route::get("/eliminar-movimiento", "RecargasController@eliminarMovimiento")->name("recarga.eliminarMovimiento");
     }
 );
 

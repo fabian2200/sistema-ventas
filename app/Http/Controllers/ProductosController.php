@@ -19,7 +19,10 @@ class ProductosController extends Controller
      */
     public function index()
     {
-        return view("productos.productos_index", ["productos" => Producto::all()]);
+        $productos = Producto::select('id', 'codigo_barras', 'descripcion', 'categoria', 'precio_compra', 'precio_venta', 'existencia', 'unidad_medida', 'created_at', 'updated_at')
+        ->get();
+
+        return view("productos.productos_index", ["productos" => $productos]);
     }
 
     public function productosPaginados(Request $request){

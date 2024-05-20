@@ -86,6 +86,30 @@ insert  into `clientes`(`id`,`nombre`,`telefono`,`created_at`,`updated_at`,`valo
 
 UNLOCK TABLES;
 
+/*Table structure for table `codigos_barra` */
+
+DROP TABLE IF EXISTS `codigos_barra`;
+
+CREATE TABLE `codigos_barra` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `imagen` longtext COLLATE utf8mb3_spanish_ci,
+  `numero` longtext COLLATE utf8mb3_spanish_ci,
+  `descripcion` text COLLATE utf8mb3_spanish_ci,
+  `fecha` text COLLATE utf8mb3_spanish_ci,
+  `hora` text COLLATE utf8mb3_spanish_ci,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish_ci;
+
+/*Data for the table `codigos_barra` */
+
+LOCK TABLES `codigos_barra` WRITE;
+
+insert  into `codigos_barra`(`id`,`imagen`,`numero`,`descripcion`,`fecha`,`hora`) values 
+(5,'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOAAAAAeAQMAAAAPe4DLAAAABlBMVEX///8AAABVwtN+AAAAAXRSTlMAQObYZgAAAAlwSFlzAAAOxAAADsQBlSsOGwAAADBJREFUKJFj+Mx/+DD/+TM2BgYfPhz+bM/P8/mDPbPNn//GB/6cZxiVHJUclaRcEgDdYttgrIb6zgAAAABJRU5ErkJggg==','20240520154256','para cebollin','20/05/2024','15:43:01'),
+(8,'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJ4AAAAeAQMAAADn+zXgAAAABlBMVEX///8AAABVwtN+AAAAAXRSTlMAQObYZgAAAAlwSFlzAAAOxAAADsQBlSsOGwAAACZJREFUKJFj+MzDzHzgzIEPNgf+nD/PfJj/PPNnG4ZRwVFBWgoCACqVQFZAC0YSAAAAAElFTkSuQmCC','FAQM','prueba','20/05/2024','16:13:42');
+
+UNLOCK TABLES;
+
 /*Table structure for table `compras` */
 
 DROP TABLE IF EXISTS `compras`;
@@ -829,7 +853,7 @@ insert  into `productos`(`id`,`codigo_barras`,`descripcion`,`categoria`,`precio_
 (677,'7704941010205','algodon  20g','Aseo',100.00,300.00,11.00,'Unidades',NULL,'2023-12-24 07:08:42','2024-01-23 14:29:42'),
 (678,'7708514049173','silicona  liquida 30ml','Aseo',1700.00,2100.00,15.00,'Unidades',NULL,'2023-12-24 07:15:22','2023-12-24 07:15:22'),
 (679,'7707706295541','silicona liquida  30ml','Aseo',1700.00,2100.00,2.00,'Unidades',NULL,'2023-12-24 07:24:57','2023-12-24 07:24:57'),
-(680,'4','CEBOLLIN','Alimentos',3067.00,4300.00,2.24,'Kilos',NULL,'2023-12-24 08:02:39','2024-04-15 11:25:01'),
+(680,'20240520154256','CEBOLLIN','Alimentos',3067.00,4300.00,5.00,'Kilos',NULL,'2023-12-24 08:02:39','2024-04-15 11:25:01'),
 (681,'8','CARNE DE RES','Alimentos',25000.00,30000.00,5.20,'Kilos',NULL,'2023-12-24 08:04:57','2024-03-14 08:51:41'),
 (682,'9','PECHUGA','Alimentos',11600.00,15000.00,8.75,'Kilos',NULL,'2023-12-24 08:05:57','2024-03-15 08:45:34'),
 (683,'0','PERNIL','pollo',6500.00,8000.00,1.64,'Kilos',NULL,'2023-12-24 08:07:39','2024-05-20 08:34:24'),
@@ -1619,7 +1643,7 @@ CREATE TABLE `recargas` (
   `hora` text COLLATE utf8mb3_spanish_ci,
   `fecha_bien` text COLLATE utf8mb3_spanish_ci,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish_ci;
 
 /*Data for the table `recargas` */
 

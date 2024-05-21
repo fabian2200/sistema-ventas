@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use DB;
 
 class AuthController extends Controller
 {
@@ -38,8 +39,13 @@ class AuthController extends Controller
         if(Auth::attempt($credentials)) {
             $user = $request->user();
 
+            $tipo_user =  DB::connection('mysql')->table('tipo_usuario')
+            ->where("tipo", $user->tipo)
+            ->first();
+
             session(['user_id' => $user->id]);
             session(['user_tipo' => $user->tipo]);
+            session(['tipo_usuario' => $tipo_user->tipo_desc]);
 
             return redirect()->route("home");
         }else{

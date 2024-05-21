@@ -26,8 +26,9 @@
                 <div class="form-group">
                     <label class="label">Tipo de vendedor</label>
                     <select class="form-control" name="tipo" id="tipo">
-                        <option @if($usuario->tipo == 2) selected @endif value="2">Tienda</option>
-                        <option @if($usuario->tipo == 3) selected @endif value="3">Miscelánea</option>
+                        @foreach ($tipos as $item)
+                            <option  @if($usuario->tipo == $item->tipo) selected @endif value="{{$item->tipo}}">{{$item->tipo_desc}}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="form-group">

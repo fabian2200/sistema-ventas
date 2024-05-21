@@ -2,7 +2,7 @@
 @section("titulo", "Ventas")
 @section("contenido")
     <br>
-    <h1 style="width: 100%; text-align: left"><strong>Ventas ({{session('user_tipo') == 1 ? 'Todo' : (session('user_tipo') == 2 ? 'Tienda' : "Miscelánea")}})</strong></h1>
+    <h1 style="width: 100%; text-align: left"><strong>Ventas ({{session('tipo_usuario')}})</strong></h1>
     <div class="row">
         <div class="col-lg-12">
             <div class="row">

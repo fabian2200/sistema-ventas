@@ -25,8 +25,9 @@
                 <div class="form-group">
                     <label class="label">Tipo de vendedor</label>
                     <select class="form-control" name="tipo" id="tipo">
-                        <option value="2">Tienda</option>
-                        <option value="3">Miscelánea</option>
+                        @foreach ($tipos as $item)
+                            <option value="{{$item->tipo}}">{{$item->tipo_desc}}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="form-group">

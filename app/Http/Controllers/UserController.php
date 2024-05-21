@@ -124,7 +124,11 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view("usuarios.usuarios_create");
+        $tipos_user = DB::connection('mysql')->table('tipo_usuario')
+        ->where("tipo", "!=", 1)
+        ->get();
+
+        return view("usuarios.usuarios_create", ["tipos" => $tipos_user]);
     }
 
     /**
@@ -160,9 +164,12 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $tipos_user = DB::connection('mysql')->table('tipo_usuario')
+        ->where("tipo", "!=", 1)
+        ->get();
+
         $user->password = "";
-        return view("usuarios.usuarios_edit", ["usuario" => $user,
-        ]);
+        return view("usuarios.usuarios_edit", ["usuario" => $user, "tipos" => $tipos_user]);
     }
 
     /**

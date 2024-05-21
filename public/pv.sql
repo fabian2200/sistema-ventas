@@ -1673,6 +1673,28 @@ insert  into `recargas`(`id`,`fecha`,`operador`,`monto`,`tipo`,`id_usuario`,`hor
 
 UNLOCK TABLES;
 
+/*Table structure for table `tipo_usuario` */
+
+DROP TABLE IF EXISTS `tipo_usuario`;
+
+CREATE TABLE `tipo_usuario` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `tipo` int DEFAULT NULL,
+  `tipo_desc` text COLLATE utf8mb3_spanish_ci,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish_ci;
+
+/*Data for the table `tipo_usuario` */
+
+LOCK TABLES `tipo_usuario` WRITE;
+
+insert  into `tipo_usuario`(`id`,`tipo`,`tipo_desc`) values 
+(1,1,'Administrador'),
+(2,2,'Tienda'),
+(3,3,'Miscelánea');
+
+UNLOCK TABLES;
+
 /*Table structure for table `users` */
 
 DROP TABLE IF EXISTS `users`;
@@ -1738,7 +1760,7 @@ insert  into `ventas`(`id`,`created_at`,`updated_at`,`id_cliente`,`total_pagar`,
 (17702,'2024-05-18 12:10:51','2024-05-19 12:10:51',4,13500,13900,0,0,'2024-05-18',6,3,13900,400,'Efectivo'),
 (17703,'2024-05-20 13:14:26','2024-05-20 13:14:26',3,3600,3600,0,0,'2024-05-20',6,3,3600,0,'Efectivo'),
 (17704,'2024-05-21 10:46:18','2024-05-21 10:46:18',3,15000,15000,0,0,'2024-05-21',6,3,15000,0,'Transferencia'),
-(17705,'2024-05-21 11:06:26','2024-05-21 11:06:26',3,5800,5800,0,0,'2024-05-21',6,3,5800,0,'Efectivo');
+(17705,'2024-05-21 11:06:26','2024-05-21 11:06:26',3,5800,5800,0,0,'2024-05-21',4,2,5800,0,'Efectivo');
 
 UNLOCK TABLES;
 

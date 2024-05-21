@@ -13,7 +13,7 @@
     
 </div>
 
-<h1 style="width: 100%; text-align: left; color: red"><strong>Esta vendiendo como:  ({{session('user_tipo') == 1 ? 'Administrador' : (session('user_tipo') == 2 ? 'Tienda' : "Miscelánea")}})</strong></h1>
+<h1 style="width: 100%; text-align: left; color: red"><strong>Esta vendiendo como:  ({{session('tipo_usuario')}})</strong></h1>
     <div class="row">
         <div class="col-12">
             <div class="row">

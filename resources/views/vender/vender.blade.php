@@ -2,6 +2,17 @@
 @section("titulo", "Realizar venta")
 @section("contenido")
 <br>
+<div id="spinner" style="display: none;">
+    <div id="spinner_venta">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Cargando...</span>
+        </div>
+        <br>
+        <h1>Guardando venta...</h1>
+    </div>
+    
+</div>
+
 <h1 style="width: 100%; text-align: left; color: red"><strong>Esta vendiendo como:  ({{session('user_tipo') == 1 ? 'Administrador' : (session('user_tipo') == 2 ? 'Tienda' : "Miscelánea")}})</strong></h1>
     <div class="row">
         <div class="col-12">
@@ -131,7 +142,7 @@
                 <form id="terminarCancelarVenta"  method="post">
                     @csrf
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
                             <div class="form-group">
                                 <label style="font-size: 20px" for="">Cliente</label>
                                 <select style="width: 100%;" class="form-control selectpicker" data-live-search="true" name="id_cliente" required id="cliente">
@@ -139,6 +150,21 @@
                                         <option value="{{$cliente->id}}">{{$cliente->nombre}}</option>
                                     @endforeach
                                 </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label style="font-size: 20px" for="">Metodo de pago</label>
+                                <select style="width: 100%;" class="form-control" name="metodo_pago" required id="metodo_pagp">
+                                   <option value="Efectivo">Efectivo</option>
+                                   <option value="Transferencia">Transferencia</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label style="font-size: 20px" for="">Total Efectivo Paga</label>
+                                <input style="background-color: chartreuse; font-size: 20px; font-weight: bold" autocomplete="off" id="total_dinero" required name="total_dinero" oninput="calcularCambio(this)" class="form-control" type="number">
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -159,12 +185,6 @@
                             <div class="form-group">
                                 <label style="font-size: 20px" for="">Total a Pagar</label>
                                 <input style="background-color: aqua; font-size: 20px; font-weight: bold" id="total_pagar_con_domi" autocomplete="off" required name="total_pagar_con_domi"  class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label style="font-size: 20px" for="">Total Efectivo Paga</label>
-                                <input style="background-color: chartreuse; font-size: 20px; font-weight: bold" autocomplete="off" id="total_dinero" required name="total_dinero" oninput="calcularCambio(this)" class="form-control" type="number">
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -733,11 +753,13 @@
                         url: '/terminarOCancelarVenta',
                         type: 'POST',
                         data: $('#terminarCancelarVenta').serialize(), 
+                        beforeSend: function() {
+                            $("#spinner").show();
+                        },
                         success: function(response) {
+                            $("#spinner").hide();
                             $("#codigo").val("").focus();
-
                             $('#modalConfirmarCompra').modal("hide");
-
                             Swal.fire({
                                 position: "center",
                                 icon: "success",
@@ -745,7 +767,6 @@
                                 showConfirmButton: false,
                                 timer: 2000
                             });
-                        
                             setTimeout(() => {
                                 location.reload();
                             }, 2000);

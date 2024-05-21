@@ -4,9 +4,11 @@
 <br>
     <div class="row">
         <div class="col-12">
-            <h1>Detalle de venta #{{$venta->id}}</h1>
-            <h1>Cliente: <small>{{$venta->cliente->nombre}}</small></h1>
-            @include("notificacion")
+            <h3>Detalle de venta <strong style="color: red">#{{$venta->id}}</strong> </h3>
+            <h3>Cliente: <strong>{{$venta->cliente->nombre}}</strong></h3>
+            <h3>metodo de pago: <strong style="color: green">{{$venta->metodo_pago}}</strong></h3>
+            <h3>Fecha de venta: <strong style="color: rgb(19, 0, 128)">{{$venta->created_at}}</strong></h3>
+            <hr>
             <button class="btn btn-info" onclick="window.history.back()">
                 <i class="fa fa-arrow-left"></i>&nbsp;Volver
             </button>

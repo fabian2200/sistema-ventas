@@ -79,10 +79,20 @@ class ProductosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
+        $codigos = DB::connection('mysql')->table('codigos_barra')
+        ->select("codigos_barra.*")
+        ->orderByRaw("CONCAT(codigos_barra.fecha, ' ', codigos_barra.hora) DESC")
+        ->get();
+       
         $categorias =  DB::connection('mysql')->table('categorias')->orderBy("categorias.nombre", "ASC")->get();
-        return view("productos.productos_create", ["categorias" => $categorias]);
+        return view(
+            "productos.productos_create", 
+            [
+                "categorias" => $categorias,
+                "codigos" => $codigos
+            ]
+        );
     }
 
     /**
@@ -141,7 +151,6 @@ class ProductosController extends Controller
         }
     }
 
-
     /**
      * Display the specified resource.
      *
@@ -161,8 +170,19 @@ class ProductosController extends Controller
      */
     public function edit(Producto $producto)
     {
+        $codigos = DB::connection('mysql')->table('codigos_barra')
+        ->select("codigos_barra.*")
+        ->orderByRaw("CONCAT(codigos_barra.fecha, ' ', codigos_barra.hora) DESC")
+        ->get();
+
         $categorias =  DB::connection('mysql')->table('categorias')->orderBy("categorias.nombre", "ASC")->get();
-        return view("productos.productos_edit", ["producto" => $producto, "categorias" => $categorias]);
+        return view(
+            "productos.productos_edit", 
+            [
+                "producto" => $producto, 
+                "categorias" => $categorias,
+                "codigos" => $codigos
+            ]);
     }
 
     /**

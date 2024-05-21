@@ -9,65 +9,69 @@
                 @php
                     $colores = ['success', 'warning', 'primary', 'morado', 'gris'];
                 @endphp
-                <div class="col-md-1" style="margin-top: 20px">
-                </div>
                 @foreach($modulos as $index => $modulo)
-                    <div class="col-md-2" style="margin-top: 20px">
-                        <div class="card" style="align-items: center; border: none; margin: 20px;">
-                            <a style="width: 210px; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" href="{{route("$modulo.index")}}" class="btn btn-{{ $colores[$index % count($colores)] }}">
+                    <div class="col-md-2" style="margin-top: 40px">
+                        <div class="card" style="width: 100%; align-items: center; border: none;">
+                            <a style="width: 100%; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" href="{{route("$modulo.index")}}" class="btn btn-{{ $colores[$index % count($colores)] }}">
                                 <img style="height: 120px; width: fit-content; padding: 15px" class="card-img-top" src="{{url("/img/$modulo.png")}}">
                                 <h5 style="font-weight: bolder;">{{$modulo === "acerca_de" ? "Acerca de" : ucwords($modulo)}}</h5>
                             </a>
                         </div>
                     </div>
                 @endforeach
-                <div class="col-md-1" style="margin-top: 20px">
+                <div class="col-md-2" style="margin-top: 40px">
+                    <div class="card" style="width: 100%; align-items: center; border: none;">
+                        <a href="{{route("codigos.index")}}" style="width: 100%; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" class="btn btn-negro">
+                            <img style="height: 120px; width: fit-content; padding: 15px" class="card-img-top" src="/img/codigo_barra.png">
+                            <h5 style="font-weight: bolder;">Códigos de Barra</h5> 
+                        </a>
+                    </div>
                 </div>
-                <div class="col-md-2" style="margin-top: 20px">
-                    <div class="card" style="align-items: center; border: none; margin: 20px;">
-                        <a style="width: 210px; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" href="{{route("$modulo.deudores")}}" class="btn btn-danger">
+                <div class="col-md-2" style="margin-top: 50px">
+                    <div class="card" style="width: 100%; align-items: center; border: none;">
+                        <a style="width: 100%; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" href="{{route("$modulo.deudores")}}" class="btn btn-danger">
                             <img style="height: 120px; width: fit-content; padding: 15px" class="card-img-top" src="/img/prestamo.png">
                             <h5 style="font-weight: bolder;">Deudores</h5> 
                         </a>
                     </div>
                 </div>
-                <div class="col-md-2" style="margin-top: 20px">
-                    <div class="card" style="align-items: center; border: none; margin: 20px;">
-                        <a style="width: 210px; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" href="{{route("proveedores")}}" class="btn btn-morado">
+                <div class="col-md-2" style="margin-top: 50px">
+                    <div class="card" style="width: 100%; align-items: center; border: none;">
+                        <a style="width: 100%; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" href="{{route("proveedores")}}" class="btn btn-morado">
                             <img style="height: 120px; width: fit-content; padding: 15px" class="card-img-top" src="/img/icon_proveedor.png">
                             <h5 style="font-weight: bolder;">Proveedores</h5> 
                         </a>
                     </div>
                 </div>
-                <div class="col-md-2" style="margin-top: 20px">
-                    <div class="card" style="align-items: center; border: none; margin: 20px;">
-                        <a style="width: 210px; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" href="{{route("categorias")}}" class="btn btn-warning">
+                <div class="col-md-2" style="margin-top: 50px">
+                    <div class="card" style="width: 100%; align-items: center; border: none;">
+                        <a style="width: 100%; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" href="{{route("categorias")}}" class="btn btn-warning">
                             <img style="height: 120px; width: fit-content; padding: 15px" class="card-img-top" src="/img/icon_categoria.png">
                             <h5 style="font-weight: bolder;">Categorias</h5> 
                         </a>
                     </div>
                 </div>
-                <div class="col-md-2" style="margin-top: 20px">
-                    <div class="card" style="align-items: center; border: none; margin: 20px;">
-                        <a style="width: 210px; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" href="{{route("compras.index")}}" class="btn btn-azul">
+                <div class="col-md-2" style="margin-top: 50px">
+                    <div class="card" style="width: 100%; align-items: center; border: none;">
+                        <a style="width: 100%; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" href="{{route("compras.index")}}" class="btn btn-azul">
                             <img style="height: 120px; width: fit-content; padding: 15px" class="card-img-top" src="/img/compras.png">
                             <h5 style="font-weight: bolder;">Compras</h5> 
                         </a>
                     </div>
                 </div>
-                <div class="col-md-2" style="margin-top: 20px">
-                    <div class="card" style="align-items: center; border: none; margin: 20px;">
-                        <a type="button" data-toggle="modal" data-target="#exampleModal" style="width: 210px; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" class="btn btn-rosado">
+                <div class="col-md-2" style="margin-top: 50px">
+                    <div class="card" style="width: 100%; align-items: center; border: none;">
+                        <a type="button" data-toggle="modal" data-target="#exampleModal" style="width: 100%; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" class="btn btn-rosado">
                             <img style="height: 120px; width: fit-content; padding: 15px" class="card-img-top" src="/img/recarga.png">
-                            <h5 style="font-weight: bolder;">Retiros y Recargas</h5> 
+                            <h6 style="font-weight: bolder; margin-bottom: 13px">Retiros y Recargas</h6> 
                         </a>
                     </div>
                 </div>
-                <div class="col-md-2" style="margin-top: 20px">
-                    <div class="card" style="align-items: center; border: none; margin: 20px;">
-                        <a href="{{route("codigos.index")}}" style="width: 210px; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" class="btn btn-negro">
-                            <img style="height: 120px; width: fit-content; padding: 15px" class="card-img-top" src="/img/codigo_barra.png">
-                            <h5 style="font-weight: bolder;">código de Barra</h5> 
+                <div class="col-md-2" style="margin-top: 50px">
+                    <div class="card" style="width: 100%; align-items: center; border: none;">
+                        <a href="{{route("contabilidad.index", ['fecha1' => date('Y-m-').'01', 'fecha2' => date('Y-m-d') ])}}" style="width: 100%; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" class="btn btn-success">
+                            <img style="height: 120px; width: fit-content; padding: 15px" class="card-img-top" src="/img/contabilidad.png">
+                            <h5 style="font-weight: bolder;">Contabilidad</h5> 
                         </a>
                     </div>
                 </div>

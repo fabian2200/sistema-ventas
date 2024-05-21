@@ -247,6 +247,39 @@
             color: #fff !important;
             font-size: 15px !important;
         }
+
+        #tabla_codigos_cp tr {
+            cursor: pointer;
+        }
+
+        #tabla_codigos_cp tr:hover {
+            background-color: #18b146;
+            color: #fff;
+        }
+
+        #tabla_codigos_ep tr {
+            cursor: pointer;
+        }
+
+        #tabla_codigos_ep tr:hover {
+            background-color: #18b146;
+            color: #fff;
+        }
+
+        #spinner_venta {
+            z-index: 999999;
+            position: absolute;
+            width: 100%;
+            top: 0px;
+            height: 100vh;
+            left: 0px;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            background-color: #000000a8;
+            flex-direction: column !important;
+            color: #fff;
+        }
     </style>
 </head>
 <body>

@@ -36,6 +36,7 @@ class VenderController extends Controller
         $venta->tipo_venta = session('user_tipo');
         $venta->total_con_domi = (double) $request->input("total_pagar_con_domi");
         $venta->valor_domicilio = $venta->total_con_domi - $venta->total_pagar;
+        $venta->metodo_pago = $request->input("metodo_pago");
         $venta->saveOrFail();
 
         if($venta->total_fiado > 0){

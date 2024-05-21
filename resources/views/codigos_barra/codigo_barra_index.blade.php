@@ -22,7 +22,7 @@
                     @foreach($codigos as $codigo)
                         <tr>
                             <td style="text-align: center">
-                                <div id="print_{{ $loop->index }}">
+                                <div onclick="verCodigos('{{$codigo->imagen}}', '{{$codigo->numero}}', '{{$codigo->descripcion}}')" style="cursor: pointer" data-toggle="modal" data-target="#modalVercodigo" id="print_{{ $loop->index }}">
                                     <img width="140" height="40" src="{{$codigo->imagen}}" alt=""><br>
                                     <label style="font-size: 13px; font-weight: bold" for="">{{$codigo->numero}}</label>
                                 </div>
@@ -77,7 +77,23 @@
             </div>
           </div>
         </div>
+    </div>
+
+    <div class="modal fade" id="modalVercodigo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-body text-center">
+                <img id="imagen_modal" src="" style="width: 300px; height: 150px" alt=""><br>
+                <h2 id="codigo_modal"></h2>
+                <h4 id="descripcion_modal"></h4>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
       </div>
+
     <script>
          $(document).ready(function () {
             var table = $('#tabla_codigos').DataTable({
@@ -281,6 +297,12 @@
                 printWindow.print();
                 printWindow.close();
             };
+        }
+
+        function verCodigos(imagen, codigo, desc){
+            document.getElementById("imagen_modal").setAttribute("src", imagen);
+            document.getElementById("codigo_modal").innerText = codigo;
+            document.getElementById("descripcion_modal").innerText = desc;
         }
     </script>
 @endsection

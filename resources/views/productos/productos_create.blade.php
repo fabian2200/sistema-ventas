@@ -12,8 +12,16 @@
                         @csrf
                         <div class="form-group">
                             <label class="label">Código de barras</label>
-                            <input autofocus required autocomplete="off" name="codigo_barras" class="form-control"
-                                type="text" placeholder="Código de barras">
+                            <div class="row">
+                                <div class="col-10">
+                                    <input autofocus required autocomplete="off" name="codigo_barras" id="codigo_barras" class="form-control" type="text" placeholder="Código de barras">
+                                </div>
+                                <div class="col-2" style="display: flex; justify-content: center; align-items: center">
+                                    <button type="button" data-toggle="modal" data-target="#modalCodigosBarras" style="width: 70%; padding: 3px !important;" class="btn btn-warning">
+                                        <i class="fas fa-2x fa-barcode"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label class="label">Descripción</label>
@@ -81,11 +89,72 @@
                 <br><br>
             </form>
         </div>
+
+        <div class="modal fade" id="modalCodigosBarras" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h3 class="modal-title" id="exampleModalLongTitle">Selecciona un código de barras</h3>
+                </div>
+                <div class="modal-body">
+                    <table id="tabla_codigos_cp" class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th style="text-align: center">Código de barras</th>
+                            <th>Código</th>
+                            <th>Descripción</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($codigos as $codigo)
+                            <tr onclick="setearCodigoBarra('{{$codigo->numero}}')">
+                                <td style="text-align: center">
+                                    <img width="100" height="30" src="{{$codigo->imagen}}" alt=""><br>
+                                </td>
+                                <td>
+                                    <label style="font-size: 13px; font-weight: bold" for="">{{$codigo->numero}}</label>
+                                </td>
+                                <td>{{$codigo->descripcion}}</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                </div>
+              </div>
+            </div>
+        </div>
     </div>
     <script>
-
         $(document).ready(function () {
             $('.select2').select2();
+            setTimeout(() => {
+                var table = $('#tabla_codigos_cp').DataTable({
+                    "pageLength": 5,
+                    language: {
+                        "decimal": "",
+                        "emptyTable": "No hay información",
+                        "info": "Mostrando _START_ a _END_ de _TOTAL_ Registros",
+                        "infoEmpty": "Mostrando 0 to 0 of 0 Registros",
+                        "infoFiltered": "(Filtrado de _MAX_ total Registros)",
+                        "infoPostFix": "",
+                        "thousands": ",",
+                        "lengthMenu": "Mostrar _MENU_ Registros",
+                        "loadingRecords": "Cargando...",
+                        "processing": "Procesando...",
+                        "search": "Buscar:",
+                        "zeroRecords": "Sin resultados encontrados",
+                        "paginate": {
+                            "first": "Primero",
+                            "last": "Ultimo",
+                            "next": "Siguiente",
+                            "previous": "Anterior"
+                        }
+                    }
+                });
+            }, 1000);
         });
     
         function cargarImagen() {
@@ -102,7 +171,11 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
-    
+
+        function setearCodigoBarra(codigo){
+            document.getElementById("codigo_barras").value = codigo;
+            $("#modalCodigosBarras").modal('hide');
+        }
        
     </script>
 @endsection

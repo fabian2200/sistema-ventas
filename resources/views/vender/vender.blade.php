@@ -451,7 +451,7 @@
                cantidad_real = cantidad / 1000;
             }else{
                 if (unidad_medida_obtenida == "Libras") {
-                    cantidad_real = cantidad / 1000;
+                    cantidad_real = cantidad / 500;
                 }else{
                     if(unidad_medida_obtenida == "Gramos"){
                         cantidad_real = cantidad;
@@ -497,7 +497,7 @@
                cantidad_real = cantidad / 1000;
             }else{
                 if (unidad_medida_obtenida == "Libras") {
-                    cantidad_real = cantidad / 1000;
+                    cantidad_real = cantidad / 500;
                 }else{
                     cantidad_real = cantidad;
                 }
@@ -601,7 +601,7 @@
                     document.getElementById("total_pagar").innerHTML = total.toLocaleString('es-CO', { style: 'currency', currency: 'COP' });;
                     document.getElementById("total_pagar_tv").value = total;
                     document.getElementById("total_pagar_con_domi").value = total;
-
+                    
                     productos.forEach(function(producto, index) {
                         var row = '<tr>' +
                             '<td>' + producto.codigo_barras + '</td>' +

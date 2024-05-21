@@ -38,18 +38,18 @@ class VentasController extends Controller
             $impresora->text("\nCliente: ");
             $impresora->text($venta->cliente->nombre . "\n");
             $impresora->text("\nDetalle de la compra\n");
-            $impresora->text("\n====================================\n");
+            $impresora->text("\n============================================\n\n");
             $total = 0;
             foreach ($venta->productos as $producto) {
                 $subtotal = $producto->cantidad * $producto->precio;
                 $total = $total + self::redondearAl100($subtotal);
                 $impresora->setJustification(Printer::JUSTIFY_LEFT);
-                $impresora->text(sprintf("%.2f %s x %s\n", $producto->cantidad, $producto->unidad,  $producto->descripcion));
-                $impresora->setJustification(Printer::JUSTIFY_RIGHT);
-                $impresora->text('$' . number_format(self::redondearAl100($subtotal), 2) . "\n");
+                $producto_text = sprintf("%.2f %s x %s", $producto->cantidad, $producto->unidad, $producto->descripcion);
+                $precio_text = '$' . number_format(self::redondearAl100($subtotal), 2);
+                $line_length = 48;
+                $combined_text = $producto_text . str_repeat(' ', $line_length - strlen($producto_text) - strlen($precio_text)) . $precio_text;
+                $impresora->text($combined_text . "\n");
             }
-            $impresora->setJustification(Printer::JUSTIFY_CENTER);
-            $impresora->text("\n====================================\n");
             $impresora->setJustification(Printer::JUSTIFY_RIGHT);
             $impresora->setEmphasis(true);
             $impresora->setTextSize(1, 1); 
@@ -57,7 +57,7 @@ class VentasController extends Controller
             $impresora->text("Domicilio: $" . number_format(self::redondearAl100($venta->valor_domicilio), 2) . "\n");
             $impresora->text("Total: $" . number_format(self::redondearAl100($venta->total_con_domi), 2) . "\n");
             $impresora->setJustification(Printer::JUSTIFY_CENTER);
-            $impresora->text("\n====================================\n");
+            $impresora->text("\n============================================\n");
             $impresora->setJustification(Printer::JUSTIFY_RIGHT);
             $impresora->text("Método de pago:".$venta->metodo_pago."\n");
             $impresora->text("Total pagado:".number_format($venta->total_dinero, 2)."\n");
@@ -99,26 +99,26 @@ class VentasController extends Controller
         $impresora->text("\nCliente: ");
         $impresora->text($venta->cliente->nombre . "\n");
         $impresora->text("\nDetalle de la compra\n");
-        $impresora->text("\n====================================\n");
+        $impresora->text("\n============================================\n\n");
         $total = 0;
         foreach ($venta->productos as $producto) {
             $subtotal = $producto->cantidad * $producto->precio;
             $total = $total + self::redondearAl100($subtotal);
             $impresora->setJustification(Printer::JUSTIFY_LEFT);
-            $impresora->text(sprintf("%.2f %s x %s\n", $producto->cantidad, $producto->unidad,  $producto->descripcion));
-            $impresora->setJustification(Printer::JUSTIFY_RIGHT);
-            $impresora->text('$' . number_format(self::redondearAl100($subtotal), 2) . "\n");
+            $producto_text = sprintf("%.2f %s x %s", $producto->cantidad, $producto->unidad, $producto->descripcion);
+            $precio_text = '$' . number_format(self::redondearAl100($subtotal), 2);
+            $line_length = 48;
+            $combined_text = $producto_text . str_repeat(' ', $line_length - strlen($producto_text) - strlen($precio_text)) . $precio_text;
+            $impresora->text($combined_text . "\n");
         }
-        $impresora->setJustification(Printer::JUSTIFY_CENTER);
-        $impresora->text("\n====================================\n");
         $impresora->setJustification(Printer::JUSTIFY_RIGHT);
         $impresora->setEmphasis(true);
         $impresora->setTextSize(1, 1);
-        $impresora->text("\nSubtotal: $" . number_format(self::redondearAl100($total), 2) . "\n");
+        $impresora->text("\n\nSubtotal: $" . number_format(self::redondearAl100($total), 2) . "\n");
         $impresora->text("Domicilio: $" . number_format(self::redondearAl100($venta->valor_domicilio), 2) . "\n");
         $impresora->text("Total: $" . number_format(self::redondearAl100($venta->total_con_domi), 2) . "\n");
         $impresora->setJustification(Printer::JUSTIFY_CENTER);
-        $impresora->text("\n====================================\n");
+        $impresora->text("\n============================================\n");
         $impresora->setJustification(Printer::JUSTIFY_RIGHT);
         $impresora->text("Método de pago:".$venta->metodo_pago."\n");
         $impresora->text("Total pagado:".number_format($venta->total_dinero, 2)."\n");

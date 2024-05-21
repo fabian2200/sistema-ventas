@@ -268,7 +268,7 @@
 
         #spinner_venta {
             z-index: 999999;
-            position: absolute;
+            position: fixed;
             width: 100%;
             top: 0px;
             height: 100vh;

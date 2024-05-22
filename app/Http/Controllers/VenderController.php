@@ -190,6 +190,7 @@ class VenderController extends Controller
                     ]);
                 }
                 $productos[$posibleIndice]->cantidad += $cantidad;
+                $productos[$posibleIndice]->cantidad = round($productos[$posibleIndice]->cantidad, 2);
                 $productos[$posibleIndice]->precio_total =  self::redondearAl100($productos[$posibleIndice]->cantidad * $productos[$posibleIndice]->precio_venta);
             }
             $this->guardarProductos($productos);

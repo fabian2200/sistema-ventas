@@ -680,7 +680,13 @@
         function calcularCambio(element){
             let total_con_domi = document.getElementById("total_pagar_con_domi").value;
             var valor = (-1) * (total_con_domi - element.value).toFixed(3)
-            document.getElementById("vueltos").value = valor;
+
+            if(valor < 0){
+                document.getElementById("vueltos").value = 0;
+            }else{
+                document.getElementById("vueltos").value = valor;
+            }
+            
             if(valor < 0){
                 document.getElementById("fiado").value = (-1) * valor;
             }else{

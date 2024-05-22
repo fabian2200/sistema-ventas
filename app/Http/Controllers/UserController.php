@@ -68,7 +68,8 @@ class UserController extends Controller
         $datos = [
             'id_cliente' => $id_cliente,
             'valor_abonado' => $total_abonar,
-            'fecha_abono' => date("d-m-Y H:i:s")
+            'fecha_abono' => date("d-m-Y H:i:s"),
+            'fecha' => date("Y-m-d")
         ];
 
         DB::connection('mysql')->table('abonos_fiados')->insert(

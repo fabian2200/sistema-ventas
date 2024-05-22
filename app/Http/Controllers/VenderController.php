@@ -92,7 +92,8 @@ class VenderController extends Controller
         $datos = [
             'id_cliente' => $id_cliente,
             'id_factura' => $id_factura,
-            'total_fiado' => $total_fiado
+            'total_fiado' => $total_fiado,
+            'fecha' => date('Y-m-d')
         ];
 
         DB::connection('mysql')->table('fiados')->insert(

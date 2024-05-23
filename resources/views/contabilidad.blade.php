@@ -18,9 +18,89 @@
                     <button onclick="buscarResultados()" class="btn btn-primary" style="font-size: 20px; margin-left: 0px; margin-top: 30px !important;"><i class="fas fa-search"></i></button>
                 </div>
             </div>
+            <hr>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        @foreach ($contabilidad["ventas"] as $item)
+                            <tr>
+                                <th style="width: 70%; background-color: #297227; color: white">{{$item["tipo"]}}</th>
+                                <td>$ {{number_format($item["total"], 2)}}</th>
+                            </tr>
+                        @endforeach
+                        <tr>
+                            <th style="width: 70%; background-color: #297227; color: white">Total vendido</th>
+                            <td style="background-color: #297227; color: white">$ {{number_format($contabilidad["total_en_ventas"], 2)}}</th>
+                        </tr>
+                    </thead>
+                </table>
+                <br>
+                <table class="table table-bordered">
+                    <thead>
+                        @foreach ($contabilidad["domicilios"] as $item)
+                            <tr>
+                                <th style="width: 70%; background-color: #56bcf7; color: black">{{$item["tipo"]}}</th>
+                                <td>$ {{number_format($item["total"], 2)}}</th>
+                            </tr>
+                        @endforeach
+                        <tr>
+                            <th style="width: 70%; background-color: #56bcf7; color: black">Total domicilios</th>
+                            <td style="background-color: #56bcf7; color: black">$ {{number_format($contabilidad["total_domicilios"], 2)}}</th>
+                        </tr>
+                    </thead>
+                </table>
+                <br>
+                <table class="table table-bordered">
+                    <thead>
+                        @foreach ($contabilidad["compras"] as $item)
+                            <tr>
+                                <th style="width: 70%; background-color: rgb(190, 18, 18); color: white">{{$item["tipo"]}}</th>
+                                <td>$ {{number_format($item["total"], 2)}}</th>
+                            </tr>
+                        @endforeach
+                        <tr>
+                            <th style="width: 70%; background-color: rgb(190, 18, 18); color: white">Total vendido</th>
+                            <td style="background-color: rgb(190, 18, 18); color: white">$ {{number_format($contabilidad["total_compras"], 2)}}</th>
+                        </tr>
+                    </thead>
+                </table>
+                <br>
+                <table class="table table-bordered">
+                    <thead>
+                        @foreach ($contabilidad["deudores"] as $item)
+                            <tr>
+                                <th style="width: 70%; background-color: #fac105;">{{$item["tipo"]}}</th>
+                                <td>$ {{number_format($item["total"], 2)}}</th>
+                            </tr>
+                        @endforeach
+                    </thead>
+                </table>
+                <br>
+                <table class="table table-bordered">
+                    <thead>
+                        @foreach ($contabilidad["recargas_y_paquetes"] as $item)
+                            <tr>
+                                <th style="width: 70%; background-color: #4605fa; color: white">{{$item["tipo"]}}</th>
+                                <td>$ {{number_format($item["total"], 2)}}</th>
+                            </tr>
+                        @endforeach
+                    </thead>
+                </table>
+                <br>
+                <table class="table table-bordered">
+                    <thead>
+                        @foreach ($contabilidad["consignaciones_y_retiros"] as $item)
+                            <tr>
+                                <th style="width: 70%; background-color: #fa05b0; color: white">{{$item["tipo"]}}</th>
+                                <td>$ {{number_format($item["total"], 2)}}</th>
+                            </tr>
+                        @endforeach
+                    </thead>
+                </table>
+            </div>
         </article>
     </div>
-
+    <br><br><br><br>
     <script>
          $(document).ready(function() {
             var fechaActual = new Date();
@@ -37,7 +117,7 @@
             var fecha1 = document.getElementById("fecha1").value;
             var fecha2 = document.getElementById("fecha2").value;
 
-            location.href ="venta-por-fecha?fecha1="+fecha1+"&fecha2="+fecha2;
+            location.href ="contabilidad?fecha1="+fecha1+"&fecha2="+fecha2;
         }
     </script>
 </div> 

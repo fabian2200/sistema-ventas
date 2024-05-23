@@ -2,15 +2,15 @@
 @section("titulo", "Inicio")
 @section('contenido')
     @foreach([
-    ["vender", "productos", "ventas", "clientes", "usuarios"],
+    ["vender", "productos", "ventas", "clientes"],
     ] as $modulos)
         <div class="col-12 pb-2">
             <div class="row">
                 @php
-                    $colores = ['success', 'warning', 'primary', 'morado', 'gris'];
+                    $colores = ['success', 'warning', 'primary', 'morado'];
                 @endphp
                 @foreach($modulos as $index => $modulo)
-                    <div class="col-md-2" style="margin-top: 40px">
+                    <div class="col-md-2" style="margin-top: 46px">
                         <div class="card" style="width: 100%; align-items: center; border: none;">
                             <a style="width: 100%; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" href="{{route("$modulo.index")}}" class="btn btn-{{ $colores[$index % count($colores)] }}">
                                 <img style="height: 120px; width: fit-content; padding: 15px" class="card-img-top" src="{{url("/img/$modulo.png")}}">
@@ -19,7 +19,17 @@
                         </div>
                     </div>
                 @endforeach
-                <div class="col-md-2" style="margin-top: 40px">
+                @if (session('user_tipo') == 1)
+                    <div class="col-md-2" style="margin-top: 46px">
+                        <div class="card" style="width: 100%; align-items: center; border: none;">
+                            <a href="{{route("usuarios.index")}}" style="width: 100%; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" class="btn btn-gris">
+                                <img style="height: 120px; width: fit-content; padding: 15px" class="card-img-top" src="/img/usuarios.png">
+                                <h5 style="font-weight: bolder;">Usuarios</h5> 
+                            </a>
+                        </div>
+                    </div>
+                @endif
+                <div class="col-md-2" style="margin-top: 46px">
                     <div class="card" style="width: 100%; align-items: center; border: none;">
                         <a href="{{route("codigos.index")}}" style="width: 100%; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" class="btn btn-negro">
                             <img style="height: 120px; width: fit-content; padding: 15px" class="card-img-top" src="/img/codigo_barra.png">
@@ -27,15 +37,15 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-md-2" style="margin-top: 50px">
+                <div class="col-md-2" style="margin-top: 46px">
                     <div class="card" style="width: 100%; align-items: center; border: none;">
-                        <a style="width: 100%; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" href="{{route("$modulo.deudores")}}" class="btn btn-danger">
+                        <a style="width: 100%; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" href="{{route("usuarios.deudores")}}" class="btn btn-danger">
                             <img style="height: 120px; width: fit-content; padding: 15px" class="card-img-top" src="/img/prestamo.png">
                             <h5 style="font-weight: bolder;">Deudores</h5> 
                         </a>
                     </div>
                 </div>
-                <div class="col-md-2" style="margin-top: 50px">
+                <div class="col-md-2" style="margin-top: 46px">
                     <div class="card" style="width: 100%; align-items: center; border: none;">
                         <a style="width: 100%; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" href="{{route("proveedores")}}" class="btn btn-morado">
                             <img style="height: 120px; width: fit-content; padding: 15px" class="card-img-top" src="/img/icon_proveedor.png">
@@ -43,7 +53,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-md-2" style="margin-top: 50px">
+                <div class="col-md-2" style="margin-top: 46px">
                     <div class="card" style="width: 100%; align-items: center; border: none;">
                         <a style="width: 100%; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" href="{{route("categorias")}}" class="btn btn-warning">
                             <img style="height: 120px; width: fit-content; padding: 15px" class="card-img-top" src="/img/icon_categoria.png">
@@ -51,7 +61,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-md-2" style="margin-top: 50px">
+                <div class="col-md-2" style="margin-top: 46px">
                     <div class="card" style="width: 100%; align-items: center; border: none;">
                         <a style="width: 100%; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" href="{{route("compras.index")}}" class="btn btn-azul">
                             <img style="height: 120px; width: fit-content; padding: 15px" class="card-img-top" src="/img/compras.png">
@@ -59,7 +69,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-md-2" style="margin-top: 50px">
+                <div class="col-md-2" style="margin-top: 46px">
                     <div class="card" style="width: 100%; align-items: center; border: none;">
                         <a type="button" data-toggle="modal" data-target="#exampleModal" style="width: 100%; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" class="btn btn-rosado">
                             <img style="height: 120px; width: fit-content; padding: 15px" class="card-img-top" src="/img/recarga.png">
@@ -67,14 +77,17 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-md-2" style="margin-top: 50px">
-                    <div class="card" style="width: 100%; align-items: center; border: none;">
-                        <a href="{{route("contabilidad.index", ['fecha1' => date('Y-m-').'01', 'fecha2' => date('Y-m-d') ])}}" style="width: 100%; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" class="btn btn-success">
-                            <img style="height: 120px; width: fit-content; padding: 15px" class="card-img-top" src="/img/contabilidad.png">
-                            <h5 style="font-weight: bolder;">Contabilidad</h5> 
-                        </a>
+                @if (session('user_tipo') == 1)
+                    <div class="col-md-2" style="margin-top: 46px">
+                        <div class="card" style="width: 100%; align-items: center; border: none;">
+                            <a href="{{route("contabilidad.index", ['fecha1' => date('Y-m-').'01', 'fecha2' => date('Y-m-d') ])}}" style="width: 100%; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" class="btn btn-success">
+                                <img style="height: 120px; width: fit-content; padding: 15px" class="card-img-top" src="/img/contabilidad.png">
+                                <h5 style="font-weight: bolder;">Contabilidad</h5> 
+                            </a>
+                        </div>
                     </div>
-                </div>
+                @endif
+                
             </div>
         </div>
     @endforeach

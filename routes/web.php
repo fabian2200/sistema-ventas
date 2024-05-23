@@ -45,7 +45,7 @@ Route::middleware("auth")
         Route::post("/modificarCodigoProducto", "ProductosController@modificarCodigoProducto")->name("modificarCodigoProducto");
 
         Route::get('/leer-peso', 'BalanzaController@leerPeso');
-        Route::get('/imprimir-ticket', 'VentasController@ImprimirTicket');
+        Route::get('/imprimir-ticket', 'VentasController@ImprimirTicket')->name("VentasController.ImprimirTicket");
         Route::get("/productos-alert", "ProductosController@alert")->name("productos.alert");
        
         Route::get("/compras", "ComprasController@index")->name("compras.index");

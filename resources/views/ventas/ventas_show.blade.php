@@ -4,15 +4,23 @@
 <br>
     <div class="row">
         <div class="col-12">
-            <h3>Detalle de venta <strong style="color: red">#{{$venta->id}}</strong> </h3>
-            <h3>Cliente: <strong>{{$venta->cliente->nombre}}</strong></h3>
-            <h3>metodo de pago: <strong style="color: green">{{$venta->metodo_pago}}</strong></h3>
-            <h3>Fecha de venta: <strong style="color: rgb(19, 0, 128)">{{$venta->created_at}}</strong></h3>
+            <div class="row">
+                <div class="col-lg-3"><h3>Detalle de venta <strong style="color: red">#{{$venta->id}}</strong> </h3></div>
+                <div class="col-lg-4"><h3>Fecha de venta: <strong style="color: rgb(19, 0, 128)">{{$venta->created_at}}</strong></h3></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3"><h3>Cliente: <strong>{{$venta->cliente->nombre}}</strong></h3></div>
+                <div class="col-lg-4"><h3>metodo de pago: <strong style="color: green">{{$venta->metodo_pago}}</strong></h3></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3"><h3>Cliente Pago: <strong>$ {{number_format($venta->total_dinero, 2)}}</strong></h3></div>
+                <div class="col-lg-3"><h3>Cliente Deuda: <strong>$ {{number_format($venta->total_fiado, 2)}}</strong></h3></div>
+            </div>
             <hr>
             <button class="btn btn-info" onclick="window.history.back()">
                 <i class="fa fa-arrow-left"></i>&nbsp;Volver
             </button>
-            <a class="btn btn-success" href="{{route("ventas.ticket", ["id" => $venta->id])}}">
+            <a class="btn btn-success" href="{{route("VentasController.ImprimirTicket", ["id_venta" => $venta->id])}}">
                 <i class="fa fa-print"></i>&nbsp;Ticket
             </a>
             <hr>

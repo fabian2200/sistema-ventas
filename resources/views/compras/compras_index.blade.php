@@ -33,7 +33,7 @@
         </div>
         <br>
         <hr>
-        <h3 style="width: 100%; text-align: center"><strong>Listado de compras</strong></h3>
+        <h3 style="width: 100%; text-align: center"><strong>Listado de compras - <strong style="color: red">{{session('tipo_usuario')}}</strong></strong></h3>
         <div class="col-12">
             @include("notificacion")
             <div class="table-responsive">
@@ -75,7 +75,7 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h2 class="modal-title">Confirmar Compra</h2>
+              <h2 class="modal-title">Confirmar Compra - <strong style="color: red">{{session('tipo_usuario')}}</strong></h2>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -109,7 +109,6 @@
                                
                             </div>
                         </div>
-                       
                         <hr>
                         <div class="col-lg-12">
                             <div class="text-right">

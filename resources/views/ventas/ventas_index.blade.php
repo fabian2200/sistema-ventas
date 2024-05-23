@@ -46,6 +46,7 @@
                 <table id="tabla_ventas" class="table table-bordered">
                     <thead style="background-color: #91baee">
                         <tr>
+                            <th>#</th>
                             <th>Fecha</th>
                             <th>Cliente</th>
                             <th>SubTotal</th>
@@ -57,6 +58,7 @@
                     <tbody>
                     @foreach($ventas as $venta)
                         <tr>
+                            <td>{{$venta->id}}</td>
                             <td>{{$venta->created_at}}</td>
                             <td>{{$venta->cliente}}</td>
                             <td>${{number_format($venta->total_pagar, 2)}}</td>

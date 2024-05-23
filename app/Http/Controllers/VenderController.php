@@ -11,10 +11,8 @@ use App\Http\Controllers\VentasController;
 use DB;
 use App\Http\Controllers\DomiciliosController;
 
-class VenderController extends Controller
-{
-    public function terminarOCancelarVenta(Request $request)
-    {
+class VenderController extends Controller{
+    public function terminarOCancelarVenta(Request $request){
         if ($request->input("accion") == "terminar") {
             return $this->terminarVenta($request);
         } else {
@@ -22,70 +20,78 @@ class VenderController extends Controller
         }
     }
 
-    public function terminarVenta(Request $request)
-    {
-        $venta = new Venta();
-        $venta->id_cliente =  $request->input('id_cliente');
-        $venta->total_pagar =  $request->input('total_pagar');
-        $venta->total_dinero =  $request->input('total_dinero');
-        $venta->total_fiado =  $request->input('total_fiado');
-        $venta->total_vueltos =  $request->input('total_vueltos');
-        $imprimir_factura = $request->input("imprimir_factura");
-        $venta->fecha_venta = date("Y-m-d");
-        $venta->id_vendedor = session('user_id');
-        $venta->tipo_venta = session('user_tipo');
-        $venta->total_con_domi = (double) $request->input("total_pagar_con_domi");
-        $venta->valor_domicilio = $venta->total_con_domi - $venta->total_pagar;
-        $venta->metodo_pago = $request->input("metodo_pago");
-        $venta->saveOrFail();
+    public function terminarVenta(Request $request){
+        $tipo_venta = session('user_tipo');
 
-        if($venta->total_fiado > 0){
-            $this->guardarFiado($venta->id_cliente, $venta->id,  $venta->total_fiado);
-        }
+        if($tipo_venta != 1){
+            $venta = new Venta();
+            $venta->id_cliente =  $request->input('id_cliente');
+            $venta->total_pagar =  $request->input('total_pagar');
+            $venta->total_dinero =  $request->input('total_dinero');
+            $venta->total_fiado =  $request->input('total_fiado');
+            $venta->total_vueltos =  $request->input('total_vueltos');
+            $imprimir_factura = $request->input("imprimir_factura");
+            $venta->fecha_venta = date("Y-m-d");
+            $venta->id_vendedor = session('user_id');
+            $venta->tipo_venta = session('user_tipo');
+            $venta->total_con_domi = (double) $request->input("total_pagar_con_domi");
+            $venta->valor_domicilio = $venta->total_con_domi - $venta->total_pagar;
+            $venta->metodo_pago = $request->input("metodo_pago");
+            $venta->saveOrFail();
 
-        $idVenta = $venta->id;
-        $productos = $this->obtenerProductos();
+            if($venta->total_fiado > 0){
+                $this->guardarFiado($venta->id_cliente, $venta->id,  $venta->total_fiado);
+            }
 
-        $lista_productos = [];
-        foreach ($productos as $producto) {
-            $productoVendido = new ProductoVendido();
-            $productoVendido->fill([
-                "id_venta" => $idVenta,
-                "descripcion" => $producto->descripcion,
-                "codigo_barras" => $producto->codigo_barras,
-                "precio" => $producto->precio_venta,
-                "cantidad" => $producto->cantidad,
-                "unidad" => $producto->unidad_medida== "Kilos" ? "Kg" : ($producto->unidad_medida == "Libras" ? "Lb" : "Und")
+            $idVenta = $venta->id;
+            $productos = $this->obtenerProductos();
+
+            $lista_productos = [];
+            foreach ($productos as $producto) {
+                $productoVendido = new ProductoVendido();
+                $productoVendido->fill([
+                    "id_venta" => $idVenta,
+                    "descripcion" => $producto->descripcion,
+                    "codigo_barras" => $producto->codigo_barras,
+                    "precio" => $producto->precio_venta,
+                    "cantidad" => $producto->cantidad,
+                    "unidad" => $producto->unidad_medida== "Kilos" ? "Kg" : ($producto->unidad_medida == "Libras" ? "Lb" : "Und")
+                ]);
+                $productoVendido->saveOrFail();
+
+                $productoActualizado = Producto::find($producto->id);
+                $productoActualizado->existencia -= $productoVendido->cantidad;
+                $productoActualizado->saveOrFail();
+
+
+                $lista_productos[] = [
+                    "codigo_barras" => $productoActualizado->codigo_barras,
+                    "existencia" => $productoActualizado->existencia
+                ];
+            }
+
+            $objeto = new VentasController();
+            $myVariable = $objeto->ticket($idVenta, $imprimir_factura);
+
+            //$actualizar = new DomiciliosController();
+            //$actualizar->actualizarCantidadesProductos($lista_productos, null);
+            
+            $this->vaciarProductos();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Venta terminada',
+                'data' => [
+                    'venta_id' => $idVenta,
+                    'ticket' => $myVariable,
+                ],
             ]);
-            $productoVendido->saveOrFail();
-
-            $productoActualizado = Producto::find($producto->id);
-            $productoActualizado->existencia -= $productoVendido->cantidad;
-            $productoActualizado->saveOrFail();
-
-
-            $lista_productos[] = [
-                "codigo_barras" => $productoActualizado->codigo_barras,
-                "existencia" => $productoActualizado->existencia
-            ];
+        }else{
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No puede realizar una venta como administrador.',
+            ]);
         }
-
-        $objeto = new VentasController();
-        $myVariable = $objeto->ticket($idVenta, $imprimir_factura);
-
-        $actualizar = new DomiciliosController();
-        $actualizar->actualizarCantidadesProductos($lista_productos, null);
-        
-        $this->vaciarProductos();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Venta terminada',
-            'data' => [
-                'venta_id' => $idVenta,
-                'ticket' => $myVariable,
-            ],
-        ]);
     }
 
     public function guardarFiado($id_cliente, $id_factura, $total_fiado){
@@ -101,8 +107,7 @@ class VenderController extends Controller
         );
     }
 
-    private function obtenerProductos()
-    {
+    private function obtenerProductos(){
         $productos = session("productos");
         if (!$productos) {
             $productos = [];
@@ -110,18 +115,15 @@ class VenderController extends Controller
         return $productos;
     }
 
-    private function vaciarProductos()
-    {
+    private function vaciarProductos(){
         $this->guardarProductos(null);
     }
 
-    private function guardarProductos($productos)
-    {
+    private function guardarProductos($productos){
         session(["productos" => $productos]);
     }
 
-    public function cancelarVenta()
-    {
+    public function cancelarVenta(){
         $this->vaciarProductos();
 
         return response()->json([
@@ -130,8 +132,7 @@ class VenderController extends Controller
         ]);
     }
 
-    public function quitarProductoDeVenta(Request $request)
-    {
+    public function quitarProductoDeVenta(Request $request){
         $indice = $request->post("indice");
         $productos = $this->obtenerProductos();
         array_splice($productos, $indice, 1);
@@ -143,8 +144,7 @@ class VenderController extends Controller
         return redirect()->route("vender.index");
     }
 
-    public function agregarProductoVenta(Request $request)
-    {        
+    public function agregarProductoVenta(Request $request){        
         $codigo = $request->post("codigo");
         $cantidad = $request->post("cantidad");
         $producto = Producto::where("codigo_barras", "=", $codigo)->first();
@@ -160,8 +160,7 @@ class VenderController extends Controller
         return $respuesta;
     }
 
-    private function agregarProductoACarrito($producto, $cantidad)
-    {
+    private function agregarProductoACarrito($producto, $cantidad){
         if ($producto->existencia <= 0) {
             return response()->json([
                 'status' => 'error',
@@ -208,8 +207,7 @@ class VenderController extends Controller
         return round($numero / 100) * 100;
     }
 
-    private function buscarIndiceDeProducto(string $codigo, array &$productos)
-    {
+    private function buscarIndiceDeProducto(string $codigo, array &$productos){
         foreach ($productos as $indice => $producto) {
             if ($producto->codigo_barras === $codigo) {
                 return $indice;
@@ -218,8 +216,7 @@ class VenderController extends Controller
         return -1;
     }
 
-    public function actualizarProductoDeVenta(Request $request)
-    {
+    public function actualizarProductoDeVenta(Request $request){
         $codigo = $request->post("codigo");
         $indice = $request->post("indice");
         $cantidad = $request->post("cantidad");
@@ -248,15 +245,13 @@ class VenderController extends Controller
     }
 
 
-    public function index()
-    {
+    public function index(){
         return view("vender.vender",[
             "clientes" => Cliente::orderBy('nombre', 'asc')->get(),
         ]);
     }
 
-    public function obtenerProductosCarritoJson()
-    {
+    public function obtenerProductosCarritoJson(){
         $total = 0;
         foreach ($this->obtenerProductos() as $producto) {
             $total += self::redondearAl100($producto->cantidad * $producto->precio_venta);

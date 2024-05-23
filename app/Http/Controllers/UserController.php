@@ -8,8 +8,10 @@ use Illuminate\Support\Facades\Hash;
 use App\Cliente;
 use DB;
 use App\Venta;
+
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\Printer;
+use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 
 class UserController extends Controller
 {
@@ -23,8 +25,7 @@ class UserController extends Controller
         return view("usuarios.usuarios_index", ["usuarios" => User::all()]);
     }
 
-    public function deudores()
-    {
+    public function deudores(){
         $resultado = Cliente::join("fiados", "clientes.id", "=", "fiados.id_cliente")
         ->join("ventas", "ventas.id", "fiados.id_factura")
         ->selectRaw("clientes.*, SUM(fiados.total_fiado) as total_fiado")
@@ -60,8 +61,7 @@ class UserController extends Controller
         return view("usuarios.usuarios_deudores", ["clientes_deudores" => $clientes_deben, "total_fiado" => $total_fiado]);
     }
 
-    public function abonar(Request $request)
-    {
+    public function abonar(Request $request){
         $id_cliente = $request->input('id_cliente');
         $total_abonar = $request->input('total_abonar');
 
@@ -123,13 +123,15 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
         $tipos_user = DB::connection('mysql')->table('tipo_usuario')
         ->where("tipo", "!=", 1)
         ->get();
 
-        return view("usuarios.usuarios_create", ["tipos" => $tipos_user]);
+        $impresoras = DB::connection('mysql')->table('impresoras')
+        ->get();
+
+        return view("usuarios.usuarios_create", ["tipos" => $tipos_user, "impresoras" => $impresoras]);
     }
 
     /**
@@ -138,8 +140,7 @@ class UserController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         $usuario = new User($request->input());
         $usuario->password = Hash::make($usuario->password);
         $usuario->saveOrFail();
@@ -152,8 +153,7 @@ class UserController extends Controller
      * @param \App\User $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
-    {
+    public function show(User $user){
         //
     }
 
@@ -163,14 +163,16 @@ class UserController extends Controller
      * @param \App\User $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
-    {
+    public function edit(User $user){
         $tipos_user = DB::connection('mysql')->table('tipo_usuario')
         ->where("tipo", "!=", 1)
         ->get();
 
+        $impresoras = DB::connection('mysql')->table('impresoras')
+        ->get();
+
         $user->password = "";
-        return view("usuarios.usuarios_edit", ["usuario" => $user, "tipos" => $tipos_user]);
+        return view("usuarios.usuarios_edit", ["usuario" => $user, "tipos" => $tipos_user, "impresoras" => $impresoras]);
     }
 
     /**
@@ -180,8 +182,7 @@ class UserController extends Controller
      * @param \App\User $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
-    {
+    public function update(Request $request, User $user){
         $user->fill($request->input());
         $user->password = Hash::make($user->password);
         $user->saveOrFail();
@@ -194,8 +195,7 @@ class UserController extends Controller
      * @param \App\User $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
-    {
+    public function destroy(User $user){
         $user->delete();
         return redirect()->route("usuarios.index")->with("mensaje", "Usuario eliminado");
     }
@@ -278,24 +278,28 @@ class UserController extends Controller
             ->get();
         }
 
-        $nombreImpresora = env("NOMBRE_IMPRESORA");
-        $connector = new WindowsPrintConnector($nombreImpresora);
+        $negocio = DB::connection('mysql')->table('negocio')->first();
+        $usuario = DB::connection('mysql')->table('users')->where('id', session('user_id'))->first();
+        $ipImpresora = $usuario->ip_impresora;
+        $puertoImpresora = env("PUERTO_IMPRESORA");
+
+        $connector = new NetworkPrintConnector($ipImpresora, $puertoImpresora);
         $impresora = new Printer($connector);
         $impresora->setJustification(Printer::JUSTIFY_CENTER);
         $impresora->setEmphasis(true);
         $impresora->text("Ticket de Deuda\n");
-        $impresora->text("Provisiones Carlos Andres\n");
-        $impresora->text("NIT 12435619\n");
-        $impresora->text("CRA 15 #13B Bis - 62\n");
-        $impresora->text("Brr. Alfonso Lopez\n");
-        $impresora->text(date("d/m/Y") . "\n");
+        $impresora->text($venta->created_at . "\n");
+        $impresora->text($negocio->nombre."\n");
+        $impresora->text("NIT ".$negocio->nit."\n");
+        $impresora->text($negocio->direccion."\n");
+        $impresora->text("Barrio ".$negocio->barrio."\n");
+        $impresora->text("Cel: ".$negocio->telefono."\n");
         $impresora->setEmphasis(false);
-        $impresora->text("Cliente: ");
-        $impresora->text($resultado->nombre . "\n");
+        $impresora->text("\nCliente: ".$resultado->nombre ."\n");
         $impresora->text("\nDetalle de la deuda\n");
         foreach ($facturas_deudas as $venta) {
             $impresora->setJustification(Printer::JUSTIFY_CENTER);
-            $impresora->text("\n===============================\n");
+            $impresora->text("\n____________________________________________\n\n");
             $impresora->text("\nFactura #".$venta->id."\n");
             $impresora->text("\nFecha Factura #".$venta->fecha_venta."\n");
             $impresora->text("\n");
@@ -303,27 +307,22 @@ class UserController extends Controller
             foreach ($venta->productos as $producto) {
                 $subtotal = $producto->cantidad * $producto->precio;
                 $total = $total + self::redondearAl100($subtotal);
-                $impresora->setJustification(Printer::JUSTIFY_LEFT);
-                $impresora->text(sprintf("%.2f %s x %s\n", $producto->cantidad, $producto->unidad,  $producto->descripcion));
-                $impresora->setJustification(Printer::JUSTIFY_RIGHT);
-                $impresora->text('$' . self::redondearAl100($subtotal) . "\n");
             }
             $impresora->setJustification(Printer::JUSTIFY_RIGHT);
             $impresora->setEmphasis(true);
-            $impresora->text("Total Factura: $" . self::redondearAl100($total) . "\n");
-            $impresora->text("Total fiado Factura: $" . self::redondearAl100($venta->total_fiado) . "\n");
+            $impresora->text("Total Factura: $" . number_format(self::redondearAl100($total), 2) . "\n");
+            $impresora->text("Total fiado Factura: $" . number_format(self::redondearAl100($venta->total_fiado), 2) . "\n");
         }
         $impresora->setJustification(Printer::JUSTIFY_CENTER);
-        $impresora->text("\n======== Deuda Total ============\n");
+        $impresora->text("\n_______________ Deuda Total _______________\n");
         $impresora->setJustification(Printer::JUSTIFY_LEFT);
         $impresora->setTextSize(3, 3);
-        $impresora->text(sprintf("Total fiado $ %.2f\n", self::redondearAl100($resultado->total_fiado)));
-        $impresora->text(sprintf("Total Abonado $ %.2f\n", self::redondearAl100($total_abonado)));
-        $impresora->text(sprintf("Total Deuda Restante $ %.2f\n", self::redondearAl100($total_deuda)));
+        $impresora->text(sprintf("Total fiado $ %.2f\n", number_format(self::redondearAl100($resultado->total_fiado), 2)));
+        $impresora->text(sprintf("Total Abonado $ %.2f\n", number_format(self::redondearAl100($total_abonado), 2)));
+        $impresora->text(sprintf("Total Deuda Restante $ %.2f\n", number_format(self::redondearAl100($total_deuda), 2)));
         $impresora->setJustification(Printer::JUSTIFY_CENTER);
         $impresora->setTextSize(1, 1);
-        $impresora->text("\nDetalle de Deuda\n");
-        $impresora->text("\nVentSOFT By Ing. Fabian Quintero\n");
+        $impresora->text("\n");
         $impresora->close();
         return response()->json(["mensaje" => "Ticket de deuda impreso correctamente!"]);
     }
@@ -332,5 +331,3 @@ class UserController extends Controller
         return round($numero / 100) * 100;
     }
 }
-
-//DELETE FROM ventas WHERE id NOT IN (SELECT id_venta FROM productos_vendidos GROUP BY id_venta)

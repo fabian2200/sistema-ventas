@@ -306,10 +306,10 @@
                     <a class="nav-link btn btn-info" style="color: white !important;" href="{{route("home")}}">Inicio&nbsp;<i class="fa fa-home"></i></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route("productos.index")}}">Productos&nbsp;<i class="fa fa-box"></i></a>
+                    <a class="nav-link" href="{{route("vender.index")}}">Vender&nbsp;<i class="fa fa-cart-plus"></i></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route("vender.index")}}">Vender&nbsp;<i class="fa fa-cart-plus"></i></a>
+                    <a class="nav-link" href="{{route("productos.index")}}">Productos&nbsp;<i class="fa fa-box"></i></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{route("clientes.index")}}">Clientes&nbsp;<i class="fa fa-users"></i></a>
@@ -363,11 +363,11 @@
 
     obtenerDomiciliosP();
     setInterval(obtenerDomiciliosP, 10000);
-
+    
     function obtenerDomiciliosP(){
         vueltas += 1;
         $.ajax({
-            url: 'https://provisiones-carlosandres.shop/ver_domicilios.php',
+            url: 'http://192.168.1.76/tienda2/ver_domicilios.php',
             type: 'GET',
             success: function(response) {
                 response = JSON.parse(response);
@@ -385,6 +385,7 @@
         });
         return false;
     }
+    
 
 </script>
 <main class="container-fluid">

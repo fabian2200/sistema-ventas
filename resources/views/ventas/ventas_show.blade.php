@@ -20,9 +20,9 @@
             <button class="btn btn-info" onclick="window.history.back()">
                 <i class="fa fa-arrow-left"></i>&nbsp;Volver
             </button>
-            <a class="btn btn-success" href="{{route("VentasController.ImprimirTicket", ["id_venta" => $venta->id])}}">
+            <button onclick="ImprimirTicket({{$venta->id}})" class="btn btn-success">
                 <i class="fa fa-print"></i>&nbsp;Ticket
-            </a>
+            </button>
             <hr>
             <h2>Productos</h2>
             <table class="table table-bordered">
@@ -67,4 +67,31 @@
             <br><br><br>
         </div>
     </div>
+
+    <script>
+        function ImprimirTicket(id_venta){
+            $.ajax({
+                url: '/imprimir-ticket?id_venta='+id_venta,
+                type: 'GET',
+                success: function(response) {
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: response.mensaje,
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: "Error: "+jqXHR.responseJSON.message,
+                        showConfirmButton: false,
+                        timer: 5000
+                    });
+                }
+            });
+        }
+    </script>
 @endsection

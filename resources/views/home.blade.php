@@ -80,7 +80,7 @@
                 @if (session('user_tipo') == 1)
                     <div class="col-md-2" style="margin-top: 46px">
                         <div class="card" style="width: 100%; align-items: center; border: none;">
-                            <a href="{{route("contabilidad.index", ['fecha1' => date('Y-m-').'01', 'fecha2' => date('Y-m-d') ])}}" style="width: 100%; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" class="btn btn-success">
+                            <a href="{{route("contabilidad.index", ['fecha1' => date('Y-m-d'), 'fecha2' => date('Y-m-d') ])}}" style="width: 100%; display: flex; flex-direction: column; padding: 20px; align-items: center; justify-content: center; border-radius: 20px; border-width: 0 0px 10px 0px;" class="btn btn-success">
                                 <img style="height: 120px; width: fit-content; padding: 15px" class="card-img-top" src="/img/contabilidad.png">
                                 <h5 style="font-weight: bolder;">Contabilidad</h5> 
                             </a>

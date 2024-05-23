@@ -768,14 +768,16 @@
                             $('#modalConfirmarCompra').modal("hide");
                             Swal.fire({
                                 position: "center",
-                                icon: "success",
-                                title: "Venta realizada correctamente",
+                                icon: response.status,
+                                title: response.message,
                                 showConfirmButton: false,
                                 timer: 2000
                             });
-                            setTimeout(() => {
-                                location.reload();
-                            }, 2000);
+                            if(response.status == "success"){
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 2000);
+                            }
                         }
                     });
                 }

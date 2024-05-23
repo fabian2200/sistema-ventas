@@ -134,7 +134,7 @@ class ProductosController extends Controller
         if (checkdnsrr('example.com', 'A')) {
             $client = new Client();
 
-            $url = 'https://provisiones-carlosandres.shop/registrar_producto.php';
+            $url = 'http://192.168.1.76/tienda2/registrar_producto.php';
 
             $data = [
                 'producto' => json_encode($producto),
@@ -313,7 +313,7 @@ class ProductosController extends Controller
         if (checkdnsrr('example.com', 'A')) {
             $client = new Client();
 
-            $url = 'https://provisiones-carlosandres.shop/actualizar_producto_nube.php';
+            $url = 'http://192.168.1.76/tienda2/actualizar_producto_nube.php';
 
             $data = [
                 'producto' => json_encode($producto),
@@ -400,7 +400,7 @@ class ProductosController extends Controller
         if (checkdnsrr('example.com', 'A')) {
             $client = new Client();
 
-            $url = 'https://provisiones-carlosandres.shop/modificar_inventario.php';
+            $url = 'http://192.168.1.76/tienda2/modificar_inventario.php';
 
             $data = [
                 'codigo_producto' => $codigo_producto,
@@ -443,7 +443,7 @@ class ProductosController extends Controller
         if (checkdnsrr('example.com', 'A')) {
             $client = new Client();
 
-            $url = 'https://provisiones-carlosandres.shop/actualizar_producto.php';
+            $url = 'http://192.168.1.76/tienda2/actualizar_producto.php';
 
             $data = [
                 'codigo_anterior' => $codigo_anterior,
@@ -479,8 +479,7 @@ class ProductosController extends Controller
         return view("productos.productos_alert", ["productos" =>  Producto::where('existencia', '<', 10)->get()]);
     }
 
-    public function generarPDF()
-    {
+    public function generarPDF(){
         $productos = DB::connection('mysql')->table('productos')->get();
 
         $total_mercancia = 0;

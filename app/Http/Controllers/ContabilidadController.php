@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
+use Mike42\Escpos\Printer;
+use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
+
 class ContabilidadController extends Controller
 {
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         $fecha1 = $request->input("fecha1");
         $fecha2 = $request->input("fecha2");
 
@@ -72,7 +75,7 @@ class ContabilidadController extends Controller
             ->sum("total_pagar");
 
             $objeto = [
-                "tipo" => "Ventas en efectivo de ".$item->tipo_desc,
+                "tipo" => "Ventas efectivo ".$item->tipo_desc,
                 "total" => $ventasConTotales
             ];
 
@@ -85,7 +88,7 @@ class ContabilidadController extends Controller
             ->sum("total_pagar");
 
             $objeto = [
-                "tipo" => "Ventas en transferencia de ".$item->tipo_desc,
+                "tipo" => "Ventas transferencia ".$item->tipo_desc,
                 "total" => $ventasConTotales
             ];
 
@@ -113,7 +116,7 @@ class ContabilidadController extends Controller
             ->sum("ventas.total_fiado");
 
             $objeto = [
-                "tipo" => "Total fiado en ".$item->tipo_desc,
+                "tipo" => "Total fiado ".$item->tipo_desc,
                 "total" => $ventasConTotales
             ];
             
@@ -149,7 +152,7 @@ class ContabilidadController extends Controller
             ->sum("compras.total");
 
             $objeto = [
-                "tipo" => "Total gastado en compras ".$item->tipo_desc,
+                "tipo" => "Total compras ".$item->tipo_desc,
                 "total" => $compras_total
             ];
             
@@ -171,12 +174,12 @@ class ContabilidadController extends Controller
         ->sum("recargas.monto");
 
         $objeto = [
-            "tipo" => "Total realizado en recargas",
+            "tipo" => "Total de recargas",
             "total" => $recargas
         ];
 
         $objeto2 = [
-            "tipo" => "Total realizado en paquetes",
+            "tipo" => "Total de paquetes",
             "total" => $paquetes
         ];
 
@@ -200,12 +203,12 @@ class ContabilidadController extends Controller
         ->sum("consignacion_retiro.monto");
 
         $objeto = [
-            "tipo" => "Total realizado en consignaciones",
+            "tipo" => "Total en consignaciones",
             "total" => $cosnignaciones
         ];
 
         $objeto2 = [
-            "tipo" => "Total realizado en retiros",
+            "tipo" => "Total en retiros",
             "total" => $retiros
         ];
 
@@ -226,7 +229,7 @@ class ContabilidadController extends Controller
             ->sum("valor_domicilio");
 
             $objeto = [
-                "tipo" => "Total domicilios de ".$item->tipo_desc,
+                "tipo" => "Domicilios de ".$item->tipo_desc,
                 "total" => $domi
             ];
 
@@ -234,5 +237,132 @@ class ContabilidadController extends Controller
         }
         
         return $domicilios;
+    }
+
+    public function imprimirContabilidad(Request $request){
+        $fecha1 = $request->input("fecha1");
+        $fecha2 = $request->input("fecha2");
+
+        $ventasEfectivoTransferencia = self::ventasEfectivoTransferencia($fecha1, $fecha2);
+        $deuda = self::deuda($fecha1, $fecha2);
+        $compras = self::compras($fecha1, $fecha2);
+        $recargasYPaquetes = self::recargasYPaquetes($fecha1, $fecha2);
+        $consignacionesYRetiros = self::consignacionesYRetiros($fecha1, $fecha2);
+        $domicilios = self::domicilios($fecha1, $fecha2);
+
+        $total_en_ventas = 0;
+        foreach ($ventasEfectivoTransferencia as $key) {
+            $total_en_ventas += $key["total"];
+        }
+
+        $total_domicilios = 0;
+        foreach ($domicilios as $key) {
+            $total_domicilios += $key["total"];
+        }
+
+        $total_compras = 0;
+        foreach ($compras as $key) {
+            $total_compras += $key["total"];
+        }
+
+        $negocio = DB::connection('mysql')->table('negocio')->first();
+        $usuario = DB::connection('mysql')->table('users')->where('id', session('user_id'))->first();
+        $ipImpresora = $usuario->ip_impresora;
+        $puertoImpresora = env("PUERTO_IMPRESORA");
+
+        $connector = new NetworkPrintConnector($ipImpresora, $puertoImpresora);
+        $impresora = new Printer($connector);
+        $impresora->setJustification(Printer::JUSTIFY_CENTER);
+        $impresora->setEmphasis(true);
+        $impresora->text("Ticket de contabilidad\n");
+        $impresora->text(date("d/m/Y H:i:s") . "\n");
+        $impresora->text($negocio->nombre."\n");
+        $impresora->text("NIT ".$negocio->nit."\n");
+        $impresora->text($negocio->direccion."\n");
+        $impresora->text("Barrio ".$negocio->barrio."\n");
+        $impresora->text("Cel: ".$negocio->telefono."\n");
+        $impresora->setEmphasis(false);
+        $impresora->text("\nDetalles de contabilidad\n");
+        $impresora->text("\n_____________________________________________\n\n");
+
+        $impresora->setTextSize(1, 1);
+        foreach ($ventasEfectivoTransferencia as $key) {
+            $tex_tipo = sprintf("%s", $key["tipo"]);
+            $precio_text = '$' . number_format($key["total"], 2);
+            $line_length = 48;
+            $combined_text = $tex_tipo . str_repeat(' ', $line_length - strlen($tex_tipo) - strlen($precio_text)) . $precio_text;
+            $impresora->text($combined_text . "\n");
+        }
+
+        $tex_tipo = sprintf("Total en ventas");
+        $precio_text = '$' . number_format($total_en_ventas, 2);
+        $line_length = 48;
+        $combined_text = $tex_tipo . str_repeat(' ', $line_length - strlen($tex_tipo) - strlen($precio_text)) . $precio_text;
+        $impresora->text("\n". $combined_text . "\n");
+
+        $impresora->text("\n_____________________________________________\n");
+
+        foreach ($domicilios as $key) {
+            $tex_tipo = sprintf("%s", $key["tipo"]);
+            $precio_text = '$' . number_format($key["total"], 2);
+            $line_length = 48;
+            $combined_text = $tex_tipo . str_repeat(' ', $line_length - strlen($tex_tipo) - strlen($precio_text)) . $precio_text;
+            $impresora->text($combined_text . "\n");
+        }
+
+        $tex_tipo = sprintf("Total en domicilios");
+        $precio_text = '$' . number_format($total_domicilios, 2);
+        $line_length = 48;
+        $combined_text = $tex_tipo . str_repeat(' ', $line_length - strlen($tex_tipo) - strlen($precio_text)) . $precio_text;
+        $impresora->text("\n". $combined_text . "\n");
+
+        $impresora->text("\n_____________________________________________\n");
+
+        foreach ($compras as $key) {
+            $tex_tipo = sprintf("%s", $key["tipo"]);
+            $precio_text = '$' . number_format($key["total"], 2);
+            $line_length = 48;
+            $combined_text = $tex_tipo . str_repeat(' ', $line_length - strlen($tex_tipo) - strlen($precio_text)) . $precio_text;
+            $impresora->text($combined_text . "\n");
+        }
+
+        $tex_tipo = sprintf("Total en compras");
+        $precio_text = '$' . number_format($total_compras, 2);
+        $line_length = 48;
+        $combined_text = $tex_tipo . str_repeat(' ', $line_length - strlen($tex_tipo) - strlen($precio_text)) . $precio_text;
+        $impresora->text("\n". $combined_text . "\n");
+
+        $impresora->text("\n_____________________________________________\n");
+
+        foreach ($deuda as $key) {
+            $tex_tipo = sprintf("%s", $key["tipo"]);
+            $precio_text = '$' . number_format($key["total"], 2);
+            $line_length = 48;
+            $combined_text = $tex_tipo . str_repeat(' ', $line_length - strlen($tex_tipo) - strlen($precio_text)) . $precio_text;
+            $impresora->text($combined_text . "\n");
+        }
+
+        $impresora->text("\n_____________________________________________\n");
+
+        foreach ($recargasYPaquetes as $key) {
+            $tex_tipo = sprintf("%s", $key["tipo"]);
+            $precio_text = '$' . number_format($key["total"], 2);
+            $line_length = 48;
+            $combined_text = $tex_tipo . str_repeat(' ', $line_length - strlen($tex_tipo) - strlen($precio_text)) . $precio_text;
+            $impresora->text($combined_text . "\n");
+        }
+
+        $impresora->text("\n_____________________________________________\n");
+
+        foreach ($consignacionesYRetiros as $key) {
+            $tex_tipo = sprintf("%s", $key["tipo"]);
+            $precio_text = '$' . number_format($key["total"], 2);
+            $line_length = 48;
+            $combined_text = $tex_tipo . str_repeat(' ', $line_length - strlen($tex_tipo) - strlen($precio_text)) . $precio_text;
+            $impresora->text($combined_text . "\n");
+        }
+        $impresora->setTextSize(1, 1);
+        $impresora->feed(10);
+        $impresora->close();
     }
 }

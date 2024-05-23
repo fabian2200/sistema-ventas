@@ -119,7 +119,22 @@
                 url: '/imprimir-ticket?id_venta='+id_venta,
                 type: 'GET',
                 success: function(response) {
-                    alert(response.mensaje);
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: response.mensaje,
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: "Error: "+jqXHR.responseJSON.message,
+                        showConfirmButton: false,
+                        timer: 5000
+                    });
                 }
             });
         }

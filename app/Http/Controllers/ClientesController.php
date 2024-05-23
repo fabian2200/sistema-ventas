@@ -97,4 +97,51 @@ class ClientesController extends Controller
             'precio_domicilio' => $precio_domi->valor_domi,
         ]);
     }
+
+    public function verificarClienteExiste(Request $request){
+        $celular_cliente = $request->input("celular_cliente");
+
+        $cliente_existe = DB::connection('mysql')->table('clientes')
+        ->where('telefono', $celular_cliente)
+        ->first();
+
+        if($cliente_existe){
+            return response()->json([
+                'estado' => 1,
+                'valor_domi'=>  $cliente_existe->valor_domi,
+                "id_cliente" => $cliente_existe->id
+            ]);
+        }else{
+            return response()->json([
+                'estado' => 0
+            ]);
+        }
+    }
+
+    public function guardarCliente(Request $request){
+        $nombre = $request->post("nombre");
+        $telefono = $request->post("telefono");
+        $direccion = $request->post("direccion");
+        $valor_domi = $request->post("valor_domi");
+
+        $insertado = DB::connection('mysql')->table('clientes')
+        ->insertGetId([
+            'nombre' => $nombre,
+            'telefono' => $telefono,
+            'direccion' => $direccion,
+            'valor_domi' => $valor_domi,
+        ]);
+
+        if($insertado){
+            return response()->json([
+                'estado' => 1,
+                'mensaje'=>  $insertado
+            ]);
+        }else{
+            return response()->json([
+                "estado" => 0,
+                'mensaje' => 'Error, intente mas tarde'
+            ]);
+        }
+    }
 }

@@ -301,8 +301,10 @@ class UserController extends Controller
             $impresora->setJustification(Printer::JUSTIFY_LEFT);
             $impresora->text("\n____________________________________________\n\n");
             $impresora->text("\nFactura #".$venta->id."\n");
-            $impresora->text("\nFecha Factura #".$venta->fecha_venta."\n");
-            $impresora->text("Total Factura: $" . number_format(self::redondearAl100($venta->total_fiado), 2) . "\n");
+            $impresora->text("Fecha Factura #".$venta->fecha_venta."\n");
+            $impresora->text("SubTotal Factura: $" . number_format(self::redondearAl100($venta->total_pagar), 2) . "\n");
+            $impresora->text("Domicilio: $" . number_format(self::redondearAl100($venta->valor_domicilio), 2) . "\n");
+            $impresora->text("Total Factura: $" . number_format(self::redondearAl100($venta->total_con_domi), 2) . "\n");
             $impresora->text("Total fiado Factura: $" . number_format(self::redondearAl100($venta->total_fiado), 2) . "\n");
         }
         $impresora->setJustification(Printer::JUSTIFY_CENTER);

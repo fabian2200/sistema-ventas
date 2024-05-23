@@ -302,18 +302,18 @@ class UserController extends Controller
             $impresora->text("\n____________________________________________\n\n");
             $impresora->text("\nFactura #".$venta->id."\n");
             $impresora->text("Fecha Factura #".$venta->fecha_venta."\n");
-            $impresora->text("SubTotal Factura: $" . number_format(self::redondearAl100($venta->total_pagar), 2) . "\n");
-            $impresora->text("Domicilio: $" . number_format(self::redondearAl100($venta->valor_domicilio), 2) . "\n");
-            $impresora->text("Total Factura: $" . number_format(self::redondearAl100($venta->total_con_domi), 2) . "\n");
-            $impresora->text("Total fiado Factura: $" . number_format(self::redondearAl100($venta->total_fiado), 2) . "\n");
+            $impresora->text("SubTotal Factura:  $" . number_format(self::redondearAl100($venta->total_pagar), 2) . "\n");
+            $impresora->text("Domicilio:         $" . number_format(self::redondearAl100($venta->valor_domicilio), 2) . "\n");
+            $impresora->text("Total Factura:     $" . number_format(self::redondearAl100($venta->total_con_domi), 2) . "\n");
+            $impresora->text("Total fiado:       $" . number_format(self::redondearAl100($venta->total_fiado), 2) . "\n");
         }
         $impresora->setJustification(Printer::JUSTIFY_CENTER);
         $impresora->text("\n_______________ Deuda Total _______________\n");
         $impresora->setJustification(Printer::JUSTIFY_LEFT);
         $impresora->setTextSize(3, 3);
-        $impresora->text(sprintf("Total fiado $ %.2f\n", number_format(self::redondearAl100($resultado->total_fiado), 2)));
-        $impresora->text(sprintf("Total Abonado $ %.2f\n", number_format(self::redondearAl100($total_abonado), 2)));
-        $impresora->text(sprintf("Total Deuda Restante $ %.2f\n", number_format(self::redondearAl100($total_deuda), 2)));
+        $impresora->text(sprintf("Total fiado:     $ %.2f\n", number_format(self::redondearAl100($resultado->total_fiado), 2)));
+        $impresora->text(sprintf("Total Abonado:   $ %.2f\n", number_format(self::redondearAl100($total_abonado), 2)));
+        $impresora->text(sprintf("Deuda Restante:  $ %.2f\n", number_format(self::redondearAl100($total_deuda), 2)));
         $impresora->setJustification(Printer::JUSTIFY_CENTER);
         $impresora->setTextSize(1, 1);
         $impresora->text("\n");

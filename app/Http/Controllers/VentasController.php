@@ -311,4 +311,88 @@ class VentasController extends Controller
             "totalVendido" => $totalVendido,
         ]);
     }
+
+    public function listarVentasMovil(Request $request){
+        $desc = $request->input("des");
+        if($desc == "todo"){
+            $ventas = DB::connection('mysql')->table('ventas')
+            ->join("clientes", "clientes.id", "ventas.id_cliente")
+            ->select("ventas.id", "ventas.created_at as fecha", "clientes.nombre as cliente", "ventas.total_con_domi as total")
+            ->orderBy("ventas.id", "DESC")
+            ->get();
+        }else{
+            $ventas = DB::connection('mysql')->table('ventas')
+            ->join("clientes", "clientes.id", "ventas.id_cliente")
+            ->select("ventas.id", "ventas.fecha_venta as fecha", "clientes.nombre as cliente", "ventas.total_con_domi as total")
+            ->where("ventas.fecha_venta", $desc)
+            ->orWhere("clientes.nombre", $desc)
+            ->orderBy("ventas.id", "DESC")
+            ->get();
+        }
+
+         return response()->json($ventas);
+    }
+
+    public function imprimirMovil(Request $request){
+        $idVenta = $request->input("id_venta");
+        $ipImpresora = $request->input("ip_impresora");
+
+        $venta = Venta::findOrFail($idVenta);
+
+        $negocio = DB::connection('mysql')->table('negocio')->first();
+        $ipImpresora = $ipImpresora;
+        $puertoImpresora = env("PUERTO_IMPRESORA");
+
+        if($imprimir_factura == "si"){
+            $connector = new NetworkPrintConnector($ipImpresora, $puertoImpresora);
+            $impresora = new Printer($connector);
+            $impresora->setJustification(Printer::JUSTIFY_CENTER);
+            $impresora->setEmphasis(true);
+            $impresora->text("Ticket de venta: #".$idVenta."\n");
+            $impresora->text($venta->created_at . "\n");
+            $impresora->text($negocio->nombre."\n");
+            $impresora->text("NIT ".$negocio->nit."\n");
+            $impresora->text($negocio->direccion."\n");
+            $impresora->text("Barrio ".$negocio->barrio."\n");
+            $impresora->text("Cel: ".$negocio->telefono."\n");
+            $impresora->setEmphasis(false);
+            $impresora->text("\nCliente: ");
+            $impresora->text($venta->cliente->nombre . "\n");
+            $impresora->text("\nDetalle de la compra\n");
+            $impresora->text("\n____________________________________________\n");
+            $total = 0;
+            foreach ($venta->productos as $producto) {
+                $subtotal = $producto->cantidad * $producto->precio;
+                $total = $total + self::redondearAl100($subtotal);
+                $impresora->setJustification(Printer::JUSTIFY_LEFT);
+                $producto_text = sprintf("%.2f %s x %s", $producto->cantidad, $producto->unidad, $producto->descripcion);
+                $precio_text = '$' . number_format(self::redondearAl100($subtotal), 2);
+                $line_length = 48;
+                $combined_text = $producto_text . str_repeat(' ', $line_length - strlen($producto_text) - strlen($precio_text)) . $precio_text;
+                $impresora->text($combined_text . "\n");
+            }
+            $impresora->setJustification(Printer::JUSTIFY_RIGHT);
+            $impresora->setEmphasis(true);
+            $impresora->setTextSize(1, 1); 
+            $impresora->text("____________________________________________\n");
+            $impresora->text("Subtotal: $" . number_format(self::redondearAl100($total), 2) . "\n");
+            $impresora->text("Domicilio: $" . number_format(self::redondearAl100($venta->valor_domicilio), 2) . "\n");
+            $impresora->text("Total: $" . number_format(self::redondearAl100($venta->total_con_domi), 2) . "\n");
+            $impresora->setJustification(Printer::JUSTIFY_CENTER);
+            $impresora->text("____________________________________________\n");
+            $impresora->setJustification(Printer::JUSTIFY_RIGHT);
+            $impresora->text("Método de pago:".$venta->metodo_pago."\n");
+            $impresora->text("Total pagado:".number_format($venta->total_dinero, 2)."\n");
+            $impresora->text("Total vueltos:".number_format($venta->total_vueltos, 2)."\n");
+            $impresora->setJustification(Printer::JUSTIFY_CENTER);
+            $impresora->setTextSize(1, 1);
+            $impresora->text("\nGracias por su compra\n");
+            $impresora->feed(10);
+            
+            $impresora->pulse();
+            $impresora->close();
+        }
+
+        return true;
+    }
 }

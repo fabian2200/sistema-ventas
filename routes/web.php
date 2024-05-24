@@ -117,3 +117,5 @@ Route::get("/listar-proveedores", "ProveedorController@buscarProveedor")->name("
 Route::post("/registrar-proveedor-movil", "ProveedorController@registrarProveedorMovil")->name("registrarProveedorMovil");
 Route::post("/editar-proveedor-movil", "ProveedorController@editarProveedorMovil")->name("editarProveedorMovil");
 Route::get("/eliminar-proveedor-movil", "ProveedorController@eliminarProveedorMovil")->name("eliminarProveedorMovil");
+Route::get("/listar-ventas-movil", "VentasController@listarVentasMovil")->name("listarVentasMovil");
+Route::get("/imprimir-movil", "VentasController@imprimirMovil")->name("imprimirMovil");

@@ -288,7 +288,6 @@ class UserController extends Controller
         $impresora->setJustification(Printer::JUSTIFY_CENTER);
         $impresora->setEmphasis(true);
         $impresora->text("Ticket de Deuda\n");
-        $impresora->text($venta->created_at . "\n");
         $impresora->text($negocio->nombre."\n");
         $impresora->text("NIT ".$negocio->nit."\n");
         $impresora->text($negocio->direccion."\n");
@@ -299,8 +298,8 @@ class UserController extends Controller
         $impresora->text("\nDetalle de la deuda\n");
         foreach ($facturas_deudas as $venta) {
             $impresora->setJustification(Printer::JUSTIFY_LEFT);
-            $impresora->text("\n____________________________________________\n\n");
-            $impresora->text("\nFactura #".$venta->id."\n");
+            $impresora->text("____________________________________________\n");
+            $impresora->text("Factura #".$venta->id."\n");
             $impresora->text("Fecha Factura #".$venta->fecha_venta."\n");
             $impresora->text("SubTotal Factura:  $" . number_format(self::redondearAl100($venta->total_pagar), 2) . "\n");
             $impresora->text("Domicilio:         $" . number_format(self::redondearAl100($venta->valor_domicilio), 2) . "\n");
@@ -310,13 +309,13 @@ class UserController extends Controller
         $impresora->setJustification(Printer::JUSTIFY_CENTER);
         $impresora->text("\n_______________ Deuda Total _______________\n");
         $impresora->setJustification(Printer::JUSTIFY_LEFT);
-        $impresora->setTextSize(3, 3);
-        $impresora->text(sprintf("Total fiado:     $ %.2f\n", number_format(self::redondearAl100($resultado->total_fiado), 2)));
-        $impresora->text(sprintf("Total Abonado:   $ %.2f\n", number_format(self::redondearAl100($total_abonado), 2)));
-        $impresora->text(sprintf("Deuda Restante:  $ %.2f\n", number_format(self::redondearAl100($total_deuda), 2)));
+        $impresora->setTextSize(1, 1);
+        $impresora->text("Total fiado:     $". number_format($resultado->total_fiado, 2). "\n");
+        $impresora->text("Total Abonado:   $". number_format($total_abonado, 2). "\n");
+        $impresora->text("Deuda Restante:  $". number_format($total_deuda, 2). "\n");
         $impresora->setJustification(Printer::JUSTIFY_CENTER);
         $impresora->setTextSize(1, 1);
-        $impresora->text("\n");
+        $impresora->feed(10);
         $impresora->close();
         return response()->json(["mensaje" => "Ticket de deuda impreso correctamente!"]);
     }

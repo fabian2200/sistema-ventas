@@ -93,7 +93,7 @@ Route::middleware("auth")
         Route::post("/editar-codigo", "BarcodeController@editarCodigo")->name("codigos.editarCodigo");
         
         Route::get("/contabilidad", "ContabilidadController@index")->name("contabilidad.index");
-        Route::get("/imprimir-contabilidad", "ContabilidadController@imprimir")->name("contabilidad.imprimir");
+        Route::get("/imprimir-contabilidad", "ContabilidadController@imprimirContabilidad")->name("contabilidad.imprimir");
     
         Route::get("/verificar-cliente-existe", "ClientesController@verificarClienteExiste")->name("clientes.verificarClienteExiste");
         Route::post("/guardar-cliente-domi", "ClientesController@guardarCliente")->name("clientes.guardarCliente");

@@ -283,8 +283,12 @@ class ContabilidadController extends Controller
         $impresora->text("Cel: ".$negocio->telefono."\n");
         $impresora->setEmphasis(false);
         $impresora->text("\nDetalles de contabilidad\n");
-        $impresora->text("\n_____________________________________________\n\n");
 
+        $impresora->setJustification(Printer::JUSTIFY_LEFT);
+        $impresora->text("\n_____________________________________________\n\n");
+        $impresora->text("Fecha Inicio: ".$fecha1."\n");
+        $impresora->text("Fecha Finalización: ".$fecha2."\n");
+        $impresora->text("_____________________________________________\n");
         $impresora->setTextSize(1, 1);
         foreach ($ventasEfectivoTransferencia as $key) {
             $tex_tipo = sprintf("%s", $key["tipo"]);
@@ -300,7 +304,7 @@ class ContabilidadController extends Controller
         $combined_text = $tex_tipo . str_repeat(' ', $line_length - strlen($tex_tipo) - strlen($precio_text)) . $precio_text;
         $impresora->text("\n". $combined_text . "\n");
 
-        $impresora->text("\n_____________________________________________\n");
+        $impresora->text("_____________________________________________\n");
 
         foreach ($domicilios as $key) {
             $tex_tipo = sprintf("%s", $key["tipo"]);
@@ -316,7 +320,7 @@ class ContabilidadController extends Controller
         $combined_text = $tex_tipo . str_repeat(' ', $line_length - strlen($tex_tipo) - strlen($precio_text)) . $precio_text;
         $impresora->text("\n". $combined_text . "\n");
 
-        $impresora->text("\n_____________________________________________\n");
+        $impresora->text("_____________________________________________\n");
 
         foreach ($compras as $key) {
             $tex_tipo = sprintf("%s", $key["tipo"]);
@@ -332,7 +336,7 @@ class ContabilidadController extends Controller
         $combined_text = $tex_tipo . str_repeat(' ', $line_length - strlen($tex_tipo) - strlen($precio_text)) . $precio_text;
         $impresora->text("\n". $combined_text . "\n");
 
-        $impresora->text("\n_____________________________________________\n");
+        $impresora->text("_____________________________________________\n");
 
         foreach ($deuda as $key) {
             $tex_tipo = sprintf("%s", $key["tipo"]);
@@ -342,7 +346,7 @@ class ContabilidadController extends Controller
             $impresora->text($combined_text . "\n");
         }
 
-        $impresora->text("\n_____________________________________________\n");
+        $impresora->text("_____________________________________________\n");
 
         foreach ($recargasYPaquetes as $key) {
             $tex_tipo = sprintf("%s", $key["tipo"]);
@@ -352,7 +356,7 @@ class ContabilidadController extends Controller
             $impresora->text($combined_text . "\n");
         }
 
-        $impresora->text("\n_____________________________________________\n");
+        $impresora->text("_____________________________________________\n");
 
         foreach ($consignacionesYRetiros as $key) {
             $tex_tipo = sprintf("%s", $key["tipo"]);

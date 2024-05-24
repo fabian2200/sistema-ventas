@@ -22,6 +22,10 @@ class VerifyCsrfToken extends Middleware
         '/editar-producto-movil',
         '/editar-inventario-movil',
         '/registrar-producto-movil',
-        '/guardar-cliente-domi'
+        '/guardar-cliente-domi',
+        '/registrar-proveedor-movil',
+        '/registrar-categoria-movil',
+        '/editar-proveedor-movil',
+        '/editar-categoria-movil'
     ];
 }

@@ -110,4 +110,10 @@ Route::get("/producto-cb", "ProductosController@productoCB")->name("productoCB")
 Route::post("/editar-inventario-movil", "ProductosController@modificarInventarioProductoMovil")->name("modificarInventarioProductoMovil");
 Route::post("/registrar-producto-movil", "ProductosController@registrarProductoMovil")->name("registrarProductoMovil");
 Route::get("/listar-categorias", "CategoriaController@listarCategorias")->name("listarCategorias");
-Route::get("/registrar-categoria-movil", "CategoriaController@guardarCategoriaMovil")->name("guardarCategoriaMovil");
+Route::post("/registrar-categoria-movil", "CategoriaController@guardarCategoriaMovil")->name("guardarCategoriaMovil");
+Route::post("/editar-categoria-movil", "CategoriaController@editarCategoriaMovil")->name("editarCategoriaMovil");
+Route::get("/eliminar-categoria-movil", "CategoriaController@eliminarCategoriaMovil")->name("eliminarCategoriaMovil");
+Route::get("/listar-proveedores", "ProveedorController@buscarProveedor")->name("buscarProveedor");
+Route::post("/registrar-proveedor-movil", "ProveedorController@registrarProveedorMovil")->name("registrarProveedorMovil");
+Route::post("/editar-proveedor-movil", "ProveedorController@editarProveedorMovil")->name("editarProveedorMovil");
+Route::get("/eliminar-proveedor-movil", "ProveedorController@eliminarProveedorMovil")->name("eliminarProveedorMovil");

@@ -15,7 +15,7 @@ class CategoriaController extends Controller
     }
 
     public function guardarCategoria(Request $request){
-        $nombre = strtolower($request->input('nombre'));
+        $nombre = $request->input('nombre');
         
         $existeCategoria = DB::connection('mysql')->table('categorias')
         ->where('nombre', $nombre)
@@ -34,8 +34,8 @@ class CategoriaController extends Controller
     }
 
     public function editarCategoria(Request $request){
-        $id = strtolower($request->input('id'));
-        $nombre = strtolower($request->input('nombre'));
+        $id = $request->input('id');
+        $nombre = $request->input('nombre');
                
         DB::connection('mysql')->table('categorias')
         ->where("id", $id)
@@ -48,36 +48,59 @@ class CategoriaController extends Controller
     }
 
     public function eliminarCategoria(Request $request){
+
         $id = $request->input('id');
                
-        $deleted = DB::connection('mysql')->table('categorias')
+        $cat = DB::connection('mysql')->table('categorias')
         ->where("id", $id)
-        ->delete();
+        ->first();
         
+        $cont = DB::connection('mysql')->table('productos')
+        ->where("categoria", $cat->nombre)
+        ->count();
 
-        if($deleted){
-            $response = [
-                'status' => 'success',
-                'message' => 'La categoría ha sido eliminada exitosamente.'
-            ];
-        } else {
+        if($cont == 0){
+            $deleted = DB::connection('mysql')->table('categorias')
+            ->where("id", $id)
+            ->delete();
+
+            if($deleted){
+                $response = [
+                    'status' => 'success',
+                    'message' => 'La categoría ha sido eliminada exitosamente.'
+                ];
+            } else {
+                $response = [
+                    'status' => 'error',
+                    'message' => 'No se pudo eliminar la categoría.'
+                ];
+            }
+        }else{
             $response = [
                 'status' => 'error',
-                'message' => 'No se pudo eliminar la categoría.'
+                'message' => 'No se pudo eliminar la categoría, ya que esta esta asociada a uno o varios productos.'
             ];
         }
-    
         return response()->json($response);
     }
 
-    public function listarCategorias()
-    {
-        $categorias =  DB::connection('mysql')->table('categorias')->orderBy("categorias.nombre", "ASC")->get();
+    public function listarCategorias(Request $request){
+        $des =  $request->input('des');
+        if($des == "todo"){
+            $categorias =  DB::connection('mysql')->table('categorias')
+            ->orderBy("categorias.nombre", "ASC")
+            ->get();
+        }else{
+            $categorias =  DB::connection('mysql')->table('categorias')
+            ->where("nombre", 'like', '%' . $des . '%')
+            ->orderBy("categorias.nombre", "ASC")
+            ->get();
+        }
         return response()->json($categorias);
     }
 
     public function guardarCategoriaMovil(Request $request){
-        $nombre = strtolower($request->input('nombre'));
+        $nombre = $request->input('nombre');
         
         $existeCategoria = DB::connection('mysql')->table('categorias')
         ->where('nombre', $nombre)
@@ -98,6 +121,72 @@ class CategoriaController extends Controller
             $response = [
                 'success' => 0,
                 'mensaje' => 'Ya existe una categoría con ese nombre'
+            ];
+        }
+
+        return response()->json($response);
+    }
+
+    public function editarCategoriaMovil(Request $request){
+        $id = $request->input('id');
+        $nombre = $request->input('nombre');
+
+        $cat = DB::connection('mysql')->table('categorias')
+        ->where("id", $id)
+        ->first();
+
+        DB::connection('mysql')->table('productos')
+        ->where("categoria", $cat->nombre)
+        ->update([
+            'categoria' => $nombre,
+        ]);
+               
+        DB::connection('mysql')->table('categorias')
+        ->where("id", $id)
+        ->update([
+            'nombre' => $nombre,
+        ]);
+
+        $response = [
+            'success' => 1,
+            'mensaje' => 'Se modifico la categoría correctamente.'
+        ];
+
+        return response()->json($response);
+    }
+
+    public function eliminarCategoriaMovil(Request $request){
+        $id = $request->input('id');
+               
+        $cat = DB::connection('mysql')->table('categorias')
+        ->where("id", $id)
+        ->first();
+        
+        $cont = DB::connection('mysql')->table('productos')
+        ->where("categoria", $cat->nombre)
+        ->count();
+
+
+        if($cont == 0){
+            $deleted = DB::connection('mysql')->table('categorias')
+            ->where("id", $id)
+            ->delete();
+
+            if($deleted){
+                $response = [
+                    'success' => 1,
+                    'mensaje' => 'La categoría ha sido eliminada exitosamente.'
+                ];
+            } else {
+                $response = [
+                    'success' => 0,
+                    'mensaje' => 'No se pudo eliminar la categoría.'
+                ];
+            }
+        }else{
+            $response = [
+                'success' => 0,
+                'mensaje' => 'No se pudo eliminar la categoría, ya que esta esta asociada a uno o varios productos.'
             ];
         }
 

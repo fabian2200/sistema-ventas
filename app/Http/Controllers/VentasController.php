@@ -326,8 +326,9 @@ class VentasController extends Controller
             $ventas = DB::connection('mysql')->table('ventas')
             ->join("clientes", "clientes.id", "ventas.id_cliente")
             ->select("ventas.id", "ventas.fecha_venta as fecha", "clientes.nombre as cliente", "ventas.total_con_domi as total")
-            ->where("ventas.id_venta", $desc)
+            ->where("ventas.id", $desc)
             ->orWhere("clientes.nombre", $desc)
+            ->orWhere("ventas.fecha_venta", $desc)
             ->orderBy("ventas.id", "DESC")
             ->get();
         }

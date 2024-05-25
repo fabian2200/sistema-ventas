@@ -100,15 +100,27 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label style="font-size: 20px" for="">Proveedor</label>
-                                <select style="font-size: 20px" name="proveedor" id="proveedor" class="form-control">
+                                <select style="font-size: 20px" name="proveedor" id="proveedor" required class="form-control">
                                    <option value="">Selecciona un proveedor</option>
                                     @foreach ($proveedores as $item)
                                         <option value="{{$item->id}}">{{$item->nombre}}</option>
                                     @endforeach
                                 </select>
-                               
                             </div>
                         </div>
+                        @if (session('user_tipo') == 1)
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label style="font-size: 20px" for="">Tipo de Compra</label>
+                                <select style="font-size: 20px" name="tipo_compra" id="tipo_compra" required class="form-control">
+                                   <option value="">Selecciona un proveedor</option>
+                                    @foreach ($tipos_usuarios as $item)
+                                        <option value="{{$item->tipo}}">{{$item->tipo_desc}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        @endif
                         <hr>
                         <div class="col-lg-12">
                             <div class="text-right">
@@ -125,6 +137,8 @@
 
     <script>
         $('#tabla_compras').DataTable({
+            dom: 'Bfrtip',
+            buttons: ['excel'],
             language: {
                 "decimal": "",
                 "emptyTable": "No hay información",

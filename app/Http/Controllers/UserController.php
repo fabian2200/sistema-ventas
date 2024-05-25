@@ -304,6 +304,7 @@ class UserController extends Controller
             $impresora->text("SubTotal Factura:  $" . number_format(self::redondearAl100($venta->total_pagar), 2) . "\n");
             $impresora->text("Domicilio:         $" . number_format(self::redondearAl100($venta->valor_domicilio), 2) . "\n");
             $impresora->text("Total Factura:     $" . number_format(self::redondearAl100($venta->total_con_domi), 2) . "\n");
+            $impresora->text("Total Pagado:      $" . number_format(self::redondearAl100($venta->total_dinero), 2) . "\n");
             $impresora->text("Total fiado:       $" . number_format(self::redondearAl100($venta->total_fiado), 2) . "\n");
         }
         $impresora->setJustification(Printer::JUSTIFY_CENTER);

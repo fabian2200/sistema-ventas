@@ -91,6 +91,8 @@
     </div>
     <script>
         $('#tabla_ventas').DataTable({
+            dom: 'Bfrtip',
+            buttons: ['excel'],
             language: {
                 "decimal": "",
                 "emptyTable": "No hay información",

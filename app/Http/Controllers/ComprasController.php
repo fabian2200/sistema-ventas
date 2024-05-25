@@ -20,10 +20,15 @@ class ComprasController extends Controller
         ->orderBy("nombre", "ASC")
         ->get();
 
+        $tipos_usuarios = DB::connection('mysql')->table('tipo_usuario')
+        ->where("tipo", "<>", 1)
+        ->get();
+
         if($tipo_logueado == 1){
             $compras = DB::connection('mysql')->table('compras')
             ->join("proveedores", "proveedores.id", "proveedor")
-            ->orderBy("compras.fecha", "DESC")
+            ->select("compras.*", "proveedores.nombre")
+            ->orderBy("compras.id", "DESC")
             ->get();
     
             $totalCompradoHoy = DB::connection('mysql')->table('compras')
@@ -35,8 +40,9 @@ class ComprasController extends Controller
         }else{
             $compras = DB::connection('mysql')->table('compras')
             ->join("proveedores", "proveedores.id", "proveedor")
+            ->select("compras.*", "proveedores.nombre")
             ->where("tipo_compra", $tipo_logueado)
-            ->orderBy("compras.fecha", "DESC")
+            ->orderBy("compras.id", "DESC")
             ->get();
     
             $totalCompradoHoy = DB::connection('mysql')->table('compras')
@@ -55,6 +61,7 @@ class ComprasController extends Controller
             "compras" => $compras, 
             "totalCompradoHoy" => $totalCompradoHoy,
             "totalComprado" => $totalComprado,
+            "tipos_usuarios" => $tipos_usuarios
         ]);
     }
 
@@ -64,6 +71,11 @@ class ComprasController extends Controller
         $date = $request->input('fecha_compra');
         $tipo_compra = session('user_tipo');
 
+        if($tipo_compra != 1){
+            $tipo_compra = session('user_tipo');
+        }else{
+            $tipo_compra = $request->input('tipo_compra');
+        }
 
         $partesFecha = explode('/', $date);
         $fechaConvertida = $partesFecha[2] . '-' . $partesFecha[1] . '-' . $partesFecha[0];

@@ -177,7 +177,7 @@
                             <div class="form-group">
                                 <div class="form-group">
                                     <label style="font-size: 20px" for="">Precio Domicilio</label>
-                                    <input autocomplete="off" id="precio_domicilio" required name="precio_domicilio" style="font-size: 20px" class="form-control" type="text" value="0">
+                                    <input autocomplete="off" oninput="calcularCambio3(this)" id="precio_domicilio" required name="precio_domicilio" style="font-size: 20px" class="form-control" type="text" value="0">
                                 </div>
                             </div>
                         </div>
@@ -679,6 +679,25 @@
 
         function calcularCambio(element){
             let total_con_domi = document.getElementById("total_pagar_con_domi").value;
+            var valor = (-1) * (total_con_domi - element.value).toFixed(3)
+
+            if(valor < 0){
+                document.getElementById("vueltos").value = 0;
+            }else{
+                document.getElementById("vueltos").value = valor;
+            }
+            
+            if(valor < 0){
+                document.getElementById("fiado").value = (-1) * valor;
+            }else{
+                document.getElementById("fiado").value = 0;
+            }
+        }
+
+        function calcularCambio3(element){
+            var total_con_domi = parseFloat(document.getElementById("total_pagar_tv").value) + parseFloat(element.value);
+            document.getElementById("total_pagar_con_domi").value =   total_con_domi;
+
             var valor = (-1) * (total_con_domi - element.value).toFixed(3)
 
             if(valor < 0){

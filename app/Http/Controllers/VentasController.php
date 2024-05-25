@@ -396,4 +396,27 @@ class VentasController extends Controller
 
         return true;
     }
+
+    public function detalleVentaMovil(Request $request){
+        $idVenta =  $request->input("id_venta");
+
+        $venta = Venta::join("clientes", "clientes.id", "ventas.id_cliente")
+        ->select("ventas.*", "clientes.nombre as cliente")
+        ->where("ventas.id", $idVenta)
+        ->first();
+
+        $venta->productos = DB::connection('mysql')->table('productos_vendidos')
+        ->select("productos_vendidos.*")
+        ->where("id_venta", $idVenta)
+        ->get();
+        
+        foreach ($venta->productos as $producto) {
+            $total = 0;
+            $subtotal = $producto->cantidad * $producto->precio;
+            $total = $total + self::redondearAl100($subtotal);
+            $producto->total = $total;
+        }
+
+        return response()->json($venta);
+    }
 }

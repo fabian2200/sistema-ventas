@@ -104,6 +104,7 @@ class UserController extends Controller
             ->where("id_cliente", $id_cliente)
             ->update([
                 'total_fiado' => 0,
+                'total_dinero' => DB::raw('total_pagar'),
             ]);
 
             DB::connection('mysql')->table('fiados')

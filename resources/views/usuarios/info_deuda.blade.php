@@ -43,9 +43,20 @@
                             <td>$ {{number_format(round(($item2->cantidad * $item2->precio) / 100) * 100, 2)}}</td>
                         </tr>
                     @endforeach
-                    <tr style="background-color: aquamarine">
-                        <th colspan="3">Total Factura</th>
-                        <th>$ {{ number_format($item->total_pagar, 2) }}</th>
+                    <tr style="border-top: 1px solid">
+                        <th colspan="2"></th>
+                        <th style="background-color: aquamarine">Subtotal</th>
+                        <th style="background-color: aquamarine">$ {{ number_format($item->total_pagar, 2) }}</th>
+                    </tr>
+                    <tr>
+                        <th colspan="2"></th>
+                        <th style="background-color: aquamarine">Domicilio</th>
+                        <th style="background-color: aquamarine">$ {{ number_format($item->valor_domicilio, 2) }}</th>
+                    </tr>
+                    <tr>
+                        <th colspan="2"></th>
+                        <th style="background-color: aquamarine">Total Factura</th>
+                        <th style="background-color: aquamarine">$ {{ number_format($item->total_con_domi, 2) }}</th>
                     </tr>
                 </table>
                 <br>

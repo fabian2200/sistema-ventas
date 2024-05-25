@@ -64,4 +64,11 @@ class AuthController extends Controller
     {
         return response()->json($request->user());
     }
+
+    public function listarImpresoras(){
+        $impresoras =  DB::connection('mysql')->table('impresoras')
+        ->get();
+
+        return response()->json($impresoras);
+    }
 }

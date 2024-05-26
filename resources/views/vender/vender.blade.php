@@ -136,89 +136,122 @@
     </div>
 
     <div class="modal" id="modalConfirmarCompra" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
           <div class="modal-content">
             <div class="modal-body">
-                <form id="terminarCancelarVenta"  method="post">
-                    @csrf
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label style="font-size: 20px" for="">Cliente</label>
-                                <select style="width: 100%;" class="form-control selectpicker" data-live-search="true" name="id_cliente" required id="cliente">
-                                    @foreach($clientes as $cliente)
-                                        <option value="{{$cliente->id}}">{{$cliente->nombre}}</option>
-                                    @endforeach
-                                </select>
+                <div class="row">
+                    <div class="col-lg-7">
+                        <form id="terminarCancelarVenta"  method="post">
+                            @csrf
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label style="font-size: 20px" for="">Cliente</label>
+                                        <select style="width: 100%;" class="form-control selectpicker" data-live-search="true" name="id_cliente" required id="cliente">
+                                            @foreach($clientes as $cliente)
+                                                <option value="{{$cliente->id}}">{{$cliente->nombre}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label style="font-size: 20px" for="">Metodo de pago</label>
+                                        <select style="width: 100%;" class="form-control" name="metodo_pago" required id="metodo_pagp">
+                                           <option value="Efectivo">Efectivo</option>
+                                           <option value="Transferencia">Transferencia</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label style="font-size: 20px" for="">Total Efectivo Paga</label>
+                                        <input style="background-color: chartreuse; font-size: 20px; font-weight: bold" autocomplete="off" id="total_dinero" required name="total_dinero" oninput="calcularCambio(this)" class="form-control" type="number">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label style="font-size: 20px" for="">Subtotal</label>
+                                        <input id="total_pagar_tv" autocomplete="off" required name="total_pagar" style="font-size: 20px" class="form-control" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label style="font-size: 20px" for="">Precio Domicilio</label>
+                                            <input autocomplete="off" oninput="calcularCambio3(this)" id="precio_domicilio" required name="precio_domicilio" style="font-size: 20px" class="form-control" type="text" value="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label style="font-size: 20px" for="">Total a Pagar</label>
+                                        <input style="background-color: aqua; font-size: 20px; font-weight: bold" id="total_pagar_con_domi" autocomplete="off" required name="total_pagar_con_domi"  class="form-control" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label style="font-size: 20px" for="">Total Cambio</label>
+                                        <input autocomplete="off" required name="total_vueltos" id="vueltos" style="font-size: 20px" class="form-control" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label style="font-size: 20px" for="">Total Fiado</label>
+                                        <input autocomplete="off" id="fiado" required name="total_fiado" style="font-size: 20px" class="form-control" type="currency">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label style="font-size: 20px" for="">Imprimir factura</label>
+                                        <select style="font-size: 20px" name="imprimir_factura" id="imprimir_factura" class="form-control">
+                                            <option value="no">no</option>
+                                            <option value="si">si</option>
+                                        </select>
+                                    </div>
+                                </div>
+                               
+                                <input type="hidden" name="accion" value="terminar" >                                
                             </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label style="font-size: 20px" for="">Metodo de pago</label>
-                                <select style="width: 100%;" class="form-control" name="metodo_pago" required id="metodo_pagp">
-                                   <option value="Efectivo">Efectivo</option>
-                                   <option value="Transferencia">Transferencia</option>
-                                </select>
+                        </form>
+                    </div>
+                    <div class="col-lg-1"></div>
+                    <div class="col-lg-4">
+                        <div class="container mt-2">
+                            <div class="row">
+                                <div class="col-4 num-key-container"><div class="num-key" data-key="1">1</div></div>
+                                <div class="col-4 num-key-container"><div class="num-key" data-key="2">2</div></div>
+                                <div class="col-4 num-key-container"><div class="num-key" data-key="3">3</div></div>
                             </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label style="font-size: 20px" for="">Total Efectivo Paga</label>
-                                <input style="background-color: chartreuse; font-size: 20px; font-weight: bold" autocomplete="off" id="total_dinero" required name="total_dinero" oninput="calcularCambio(this)" class="form-control" type="number">
+                            <div class="row">
+                                <div class="col-4 num-key-container"><div class="num-key" data-key="4">4</div></div>
+                                <div class="col-4 num-key-container"><div class="num-key" data-key="5">5</div></div>
+                                <div class="col-4 num-key-container"><div class="num-key" data-key="6">6</div></div>
                             </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label style="font-size: 20px" for="">Subtotal</label>
-                                <input id="total_pagar_tv" autocomplete="off" required name="total_pagar" style="font-size: 20px" class="form-control" type="text">
+                            <div class="row">
+                                <div class="col-4 num-key-container"><div class="num-key" data-key="7">7</div></div>
+                                <div class="col-4 num-key-container"><div class="num-key" data-key="8">8</div></div>
+                                <div class="col-4 num-key-container"><div class="num-key" data-key="9">9</div></div>
                             </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <div class="form-group">
-                                    <label style="font-size: 20px" for="">Precio Domicilio</label>
-                                    <input autocomplete="off" oninput="calcularCambio3(this)" id="precio_domicilio" required name="precio_domicilio" style="font-size: 20px" class="form-control" type="text" value="0">
+                            <div class="row">
+                                <div class="col-4 num-key-container"><div class="num-key" data-key=".">.</div></div>
+                                <div class="col-4 num-key-container"><div class="num-key" data-key="0">0</div></div>
+                                <div class="col-4 num-key-container"><div style="background-color: rgb(255, 168, 5)" class="num-key" data-key="backspace"><i class="fas fa-backspace"></i></div></div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="text-right">
+                                        <button style="width: 100%; font-size: 16px" onclick="terminarVenta()" type="button" class="btn btn-success">Terminar venta</button>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <a  onclick="cerrarModalTerminarVenta()" style="color: white; width: 100%; height: 64px; font-size: 16px; padding-top: 20px" class="btn btn-danger" data-dismiss="modal">Cerrar</a>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label style="font-size: 20px" for="">Total a Pagar</label>
-                                <input style="background-color: aqua; font-size: 20px; font-weight: bold" id="total_pagar_con_domi" autocomplete="off" required name="total_pagar_con_domi"  class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label style="font-size: 20px" for="">Total Cambio</label>
-                                <input autocomplete="off" required name="total_vueltos" id="vueltos" style="font-size: 20px" class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label style="font-size: 20px" for="">Total Fiado</label>
-                                <input autocomplete="off" id="fiado" required name="total_fiado" style="font-size: 20px" class="form-control" type="currency">
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label style="font-size: 20px" for="">Imprimir factura</label>
-                                <select style="font-size: 20px" name="imprimir_factura" id="imprimir_factura" class="form-control">
-                                    <option value="no">no</option>
-                                    <option value="si">si</option>
-                                </select>
-                            </div>
-                        </div>
-                       
-                        <input type="hidden" name="accion" value="terminar" >
-                        <hr>
-                        <div class="col-lg-12">
-                            <div class="text-right">
-                                <button onclick="terminarVenta()" type="button" class="btn btn-success">Terminar venta</button>
-                                <a onclick="cerrarModalTerminarVenta()" style="color: white" class="btn btn-danger" data-dismiss="modal">Cerrar</a>
-                            </div>
-                        </div>
                     </div>
-                </form>
+                </div>
             </div>
           </div>
         </div>
@@ -571,6 +604,33 @@
                 var selectedOption = this.value;
                 buscarPrecioDomi(selectedOption);
             };
+
+            $('.num-key').on('click', function() {
+                var key = $(this).data('key');
+                var display = $('#total_dinero');
+                var currentValue = display.val();
+
+                if (key === 'backspace') {
+                    display.val(currentValue.slice(0, -1));
+                } else {
+                    display.val(currentValue + key);
+                }
+
+                let total_con_domi = document.getElementById("total_pagar_con_domi").value;
+                var valor = (-1) * (total_con_domi - parseFloat(display.val() != "" ? display.val() : 0)).toFixed(3)
+
+                if(valor < 0){
+                    document.getElementById("vueltos").value = 0;
+                }else{
+                    document.getElementById("vueltos").value = valor;
+                }
+                
+                if(valor < 0){
+                    document.getElementById("fiado").value = (-1) * valor;
+                }else{
+                    document.getElementById("fiado").value = 0;
+                }
+            });
         });
 
         function buscarPrecioDomi(id_cliente){

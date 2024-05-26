@@ -280,6 +280,30 @@
             flex-direction: column !important;
             color: #fff;
         }
+
+        .num-key-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+        }
+        .num-key {
+            font-size: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+            background-color: #535353; /* Color azul */
+            color: white; /* Letras blancas */
+            border-radius: 20px; /* Bordes redondeados */
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .num-key:hover {
+            background-color: #0056b3; /* Color azul más oscuro al pasar el cursor */
+        }
     </style>
 </head>
 <body>

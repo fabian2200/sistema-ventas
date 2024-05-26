@@ -288,8 +288,10 @@ class UserController extends Controller
         $impresora = new Printer($connector);
         $impresora->setJustification(Printer::JUSTIFY_CENTER);
         $impresora->setEmphasis(true);
+        $impresora->setTextSize(2, 2);
+        $impresora->text($negocio->nombre."\n\n\n");
+        $impresora->setTextSize(1, 1);
         $impresora->text("Ticket de Deuda\n");
-        $impresora->text($negocio->nombre."\n");
         $impresora->text("NIT ".$negocio->nit."\n");
         $impresora->text($negocio->direccion."\n");
         $impresora->text("Barrio ".$negocio->barrio."\n");

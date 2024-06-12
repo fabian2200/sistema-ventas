@@ -22,6 +22,12 @@ class ProductosController extends Controller
         $productos = Producto::select('id', 'codigo_barras', 'descripcion', 'categoria', 'precio_compra', 'precio_venta', 'existencia', 'unidad_medida', 'created_at', 'updated_at')
         ->get();
 
+        foreach ($productos as $producto) {
+            $ganancia = $producto->precio_venta - $producto->precio_compra;
+            $porcentaje = round(($ganancia /  $producto->precio_compra) * 100, 2);
+            $producto->porcentaje = $porcentaje;
+        }
+
         return view("productos.productos_index", ["productos" => $productos]);
     }
 

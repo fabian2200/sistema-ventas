@@ -41,6 +41,7 @@ Route::middleware("auth")
         Route::post("/actualizarProductoDeVenta", "VenderController@actualizarProductoDeVenta")->name("actualizarProductoDeVenta");
         Route::post("/terminarOCancelarVenta", "VenderController@terminarOCancelarVenta")->name("terminarOCancelarVenta");
         Route::post("/modificarInventarioProducto", "ProductosController@modificarInventarioProducto")->name("modificarInventarioProducto");
+        Route::post("/modificarInventarioProductoPorcentaje", "ProductosController@modificarInventarioProducto")->name("modificarInventarioProductoPorcentaje");
         Route::get("/verificarUnidadProducto", "ProductosController@verificarUnidadProducto")->name("verificarUnidadProducto");
         Route::post("/modificarCodigoProducto", "ProductosController@modificarCodigoProducto")->name("modificarCodigoProducto");
 

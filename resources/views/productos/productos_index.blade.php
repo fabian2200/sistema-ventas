@@ -24,6 +24,7 @@
                             <th>Precio de compra</th>
                             <th>Precio de venta</th>
                             <th>Utilidad</th>
+                            <th>Ganancia</th>
                             <th>Existencia</th>
                             <th>opciones</th>
                         </tr>
@@ -37,10 +38,14 @@
                             <td>{{$producto->precio_compra}}</td>
                             <td>{{$producto->precio_venta}}</td>
                             <td>{{$producto->precio_venta - $producto->precio_compra}}</td>
+                            <td style="text-align: center">
+                                <strong>{{$producto->porcentaje}} %</strong>
+                                <br>
+                                <br>
+                                <button onclick="seleccionarProducto2('{{ $producto->descripcion }}', '{{ $producto->codigo_barras }}', {{ $producto->precio_compra}}, {{$producto->precio_venta}}, {{ $producto->existencia }})"  class="btn btn-dark">Cambiar <br> porcentaje</button>
+                            </td>
                             <td class="text-center">
                                 {{$producto->existencia}} <strong>{{ $producto->unidad_medida }}</strong>
-                                <hr>
-                                <button onclick="seleccionarProducto('{{ $producto->descripcion }}', '{{ $producto->codigo_barras }}', {{ $producto->precio_compra}}, {{$producto->precio_venta}}, {{ $producto->existencia }})" onclick="" class="btn btn-success">Inventario</button>
                             </td>
                             <td style="text-align: center">
                                 <a class="btn btn-warning" href="{{route("productos.edit",[$producto])}}">
@@ -54,6 +59,8 @@
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </form>
+                                <hr>
+                                <button onclick="seleccionarProducto('{{ $producto->descripcion }}', '{{ $producto->codigo_barras }}', {{ $producto->precio_compra}}, {{$producto->precio_venta}}, {{ $producto->existencia }}, '{{ $producto->unidad_medida }}')" class="btn btn-success">Inventario</button>
                             </td>
                         </tr>
                     @endforeach
@@ -120,7 +127,7 @@
                                 <input required id="existencia_producto" name="cantidad_disponible" style="font-size: 20px" class="form-control" type="text">
                             </div>
                             <div class="form-group">
-                                <label style="font-size: 20px" for="">Precio Compra por Unidad o por Libra</label>
+                                <label style="font-size: 20px" for="">Precio Compra por <span id="um1"></span></label>
                                 <input required id="precio_compra_producto" name="precio_compra" style="font-size: 20px" class="form-control" type="text">
                             </div>
                         </div>
@@ -130,11 +137,60 @@
                                 <input id="fiado" required name="nueva_cantidad" style="font-size: 20px" class="form-control" type="currency">
                             </div>
                             <div class="form-group">
-                                <label style="font-size: 20px" for="">Precio Venta por Unidad o por Libra</label>
+                                <label style="font-size: 20px" for="">Precio Venta por <span id="um2"></span></label>
                                 <input required id="precio_venta_producto" name="precio_venta" style="font-size: 20px" class="form-control" type="text">
                             </div>
                         </div>
                         <input id="codigo_producto" name="codigo_producto" type="hidden">
+                        <hr>
+                        <div class="col-lg-12">
+                            <div class="text-right">
+                                <button style="font-size: 20px"  type="submit" class="btn btn-success">Guardar datos</button>
+                                <a style="font-size: 20px; color: white" class="btn btn-danger" data-dismiss="modal">Cerrar</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="modal" id="modalInventarioPorcentaje" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-xl" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 class="modal-title">Inventario Producto - <strong style="color: green" id="nombre_producto_p"></strong></h2>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{route("modificarInventarioProductoPorcentaje")}}" method="post">
+                    @csrf
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label style="font-size: 20px" for="">Cantidad Disponible</label>
+                                <input required id="existencia_producto_p" name="cantidad_disponible" style="font-size: 20px" class="form-control" type="text">
+                            </div>
+                            <div class="form-group">
+                                <label style="font-size: 20px" for="">Precio Compra</label>
+                                <input required id="precio_compra_producto_p" name="precio_compra" style="font-size: 20px" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label style="font-size: 20px" for="">Agregar Cantidad</label>
+                                <input id="fiado" value="0" required name="nueva_cantidad" style="font-size: 20px" class="form-control" type="currency">
+                            </div>
+                            <div class="form-group">
+                                <label style="font-size: 20px" for="">Porcentaje de ganancia</label>
+                                <input required id="precio_venta_producto_p" name="precio_venta" style="font-size: 20px; width: 80%" class="form-control" type="hidden">
+                                <input oninput="calcularPrecioVenta()" required id="porcentaje_producto_p" name="porcentaje_ganancia" style="font-size: 20px" class="form-control" type="number">
+                            </div>
+                        </div>
+                        <input id="codigo_producto_p" name="codigo_producto" type="hidden">
                         <hr>
                         <div class="col-lg-12">
                             <div class="text-right">
@@ -176,7 +232,7 @@
             });
         });
 
-        function seleccionarProducto(nombre, item, precio_compra, precio_venta, existencia){
+        function seleccionarProducto(nombre, item, precio_compra, precio_venta, existencia, um){
             $('#modalInventario').modal("show")
 
             document.getElementById("nombre_producto").innerHTML = nombre;
@@ -184,6 +240,37 @@
             document.getElementById("precio_venta_producto").value = precio_venta;
             document.getElementById("existencia_producto").value = existencia;
             document.getElementById("codigo_producto").value = item;
+
+            document.getElementById("um1").innerText = um;
+            document.getElementById("um2").innerText = um;
+        }
+
+        function seleccionarProducto2(nombre, item, precio_compra, precio_venta, existencia){
+            $('#modalInventarioPorcentaje').modal("show")
+
+            document.getElementById("nombre_producto_p").innerHTML = nombre;
+            document.getElementById("precio_compra_producto_p").value = precio_compra;
+            document.getElementById("existencia_producto_p").value = existencia;
+            document.getElementById("codigo_producto_p").value = item;
+
+
+            var ganancia = precio_venta - precio_compra;
+            var porcentajeGanancia = (ganancia / precio_compra) * 100;
+
+            porcentajeGanancia = parseFloat(porcentajeGanancia.toFixed(2));
+
+            document.getElementById("porcentaje_producto_p").value = porcentajeGanancia;
+            document.getElementById("precio_venta_producto_p").value = precio_venta;
+        }
+
+        function calcularPrecioVenta() {
+            var precioCompra =  document.getElementById("precio_compra_producto_p").value;
+            var porcentajeGanancia = document.getElementById("porcentaje_producto_p").value;
+            
+            var precioVenta = precioCompra * (1 + (porcentajeGanancia / 100));
+            precioVenta =  parseFloat(precioVenta.toFixed(2));
+
+            document.getElementById("precio_venta_producto_p").value = precioVenta;
         }
 
         function setCodigoBarras(codigo) {

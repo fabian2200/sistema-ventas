@@ -32,14 +32,20 @@
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label class="label">Precio de compra</label>
-                                    <input required autocomplete="off" name="precio_compra" class="form-control"
+                                    <input oninput="calcularPrecioVenta()" required autocomplete="off" id="precio_compra" name="precio_compra" class="form-control"
                                         type="decimal(9,2)" placeholder="Precio de compra">
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label class="label">Porcentaje</label>
+                                   <input oninput="calcularPrecioVenta()" type="number" id="porcentaje" name="porcentaje" placeholder="20%" class="form-control">
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label class="label">Precio de venta</label>
-                                    <input required autocomplete="off" name="precio_venta" class="form-control"
+                                    <input required autocomplete="off" id="precio_venta" name="precio_venta" class="form-control"
                                         type="decimal(9,2)" placeholder="Precio de venta">
                                 </div>
                             </div>
@@ -50,7 +56,18 @@
                                         type="number" placeholder="Existencia">
                                 </div>
                             </div>
-                            <div class="col-lg-2">
+
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8" style="margin-bottom: 20px">
+                                <label class="label">Categoria del producto</label>
+                                <select name="categoria" class="form-control select2" placeholder="Select City" required>
+                                    @foreach ($categorias as $item)
+                                        <option value="{{$item->nombre}}">{{$item->nombre}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-lg-4">
                                 <div class="form-group">
                                     <label class="label">Medida</label>
                                     <select name="unidad_medida" id="unidad_medida" class="form-control">
@@ -60,16 +77,6 @@
                                         <option value="Kilos">Kilos</option>
                                     </select>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12" style="margin-bottom: 20px">
-                                <label class="label">Categoria del producto</label>
-                                <select name="categoria" class="form-control select2" placeholder="Select City" required>
-                                    @foreach ($categorias as $item)
-                                        <option value="{{$item->nombre}}">{{$item->nombre}}</option>
-                                    @endforeach
-                                </select>
                             </div>
                         </div>
                     </div>
@@ -177,5 +184,14 @@
             $("#modalCodigosBarras").modal('hide');
         }
        
+        function calcularPrecioVenta() {
+            var precioCompra =  document.getElementById("precio_compra").value;
+            var porcentajeGanancia = document.getElementById("porcentaje").value;
+            
+            var precioVenta = precioCompra * (1 + (porcentajeGanancia / 100));
+            precioVenta =  parseFloat(precioVenta.toFixed(2));
+
+            document.getElementById("precio_venta").value = precioVenta;
+        }
     </script>
 @endsection

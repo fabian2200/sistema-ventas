@@ -17,14 +17,23 @@ class ProductosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $productos = Producto::select('id', 'codigo_barras', 'descripcion', 'categoria', 'precio_compra', 'precio_venta', 'existencia', 'unidad_medida', 'created_at', 'updated_at')
-        ->get();
+    public function index(Request $request){
+        $query = Producto::select('id', 'codigo_barras', 'descripcion', 'categoria', 'precio_compra', 'precio_venta', 'existencia', 'unidad_medida', 'created_at', 'updated_at');
+    
+        // Check if there is a search query
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where('descripcion', 'like', '%' . $search . '%')
+                ->orWhere('codigo_barras', 'like', '%' . $search . '%')
+                ->orWhere('categoria', 'like', '%' . $search . '%');
+        }
+
+        // Paginate results
+        $productos = $query->paginate(20);
 
         foreach ($productos as $producto) {
             $ganancia = $producto->precio_venta - $producto->precio_compra;
-            $porcentaje = round(($ganancia /  $producto->precio_compra) * 100, 2);
+            $porcentaje = round(($ganancia / $producto->precio_compra) * 100, 2);
             $producto->porcentaje = $porcentaje;
         }
 

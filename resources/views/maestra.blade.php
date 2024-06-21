@@ -304,6 +304,10 @@
         .num-key:hover {
             background-color: #0056b3; /* Color azul más oscuro al pasar el cursor */
         }
+
+        .page-link {
+            font-size: 16px !important;
+        }
     </style>
 </head>
 <body>

@@ -14,6 +14,20 @@
             
            
             <hr>
+            <br>
+            <div class="container" style="width: 100% !important; max-width: 100%">
+                <div class="row">
+                    <div class="col-lg-6"></div>
+                    <div class="col-lg-6">
+                        <form action="{{ route('productos.index') }}" method="GET" class="mb-4">
+                            <div class="input-group">
+                                <input type="text" name="search" class="form-control" placeholder="Nombre del producto o Código de barras" value="{{ request()->input('search') }}">
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             @include("notificacion")
             <div class="table-responsive">
                 <table id="tabla_productos" class="table table-bordered">
@@ -66,6 +80,11 @@
                     @endforeach
                     </tbody>
                 </table>
+                <br>
+                <!-- Pagination links -->
+                <div class="d-flex justify-content-center">
+                    {{ $productos->appends(request()->input())->links() }}
+                </div>
                 <br><br><br><br>
             </div>
         </div>
@@ -206,32 +225,6 @@
     </div>
 
     <script>
-
-        $(document).ready(function () {
-            var table = $('#tabla_productos').DataTable({
-                language: {
-                    "decimal": "",
-                    "emptyTable": "No hay información",
-                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Productos",
-                    "infoEmpty": "Mostrando 0 to 0 of 0 Productos",
-                    "infoFiltered": "(Filtrado de _MAX_ total Productos)",
-                    "infoPostFix": "",
-                    "thousands": ",",
-                    "lengthMenu": "Mostrar _MENU_ Productos",
-                    "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
-                    "search": "Buscar:",
-                    "zeroRecords": "Sin resultados encontrados",
-                    "paginate": {
-                        "first": "Primero",
-                        "last": "Ultimo",
-                        "next": "Siguiente",
-                        "previous": "Anterior"
-                    }
-                }
-            });
-        });
-
         function seleccionarProducto(nombre, item, precio_compra, precio_venta, existencia, um){
             $('#modalInventario').modal("show")
 
